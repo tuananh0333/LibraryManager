@@ -2,8 +2,10 @@
     <string name="app_name">LibraryManager</string>
 
     <string name="edt_id_hint">Mã đăng nhập</string>
+    <string name="edt_search_param_hint">Tên sách, tác giả, &#8230;</string>
     <string name="edt_password_hint">Mật khẩu</string>
     <string name="btn_login">Đăng nhập</string>
     <string name="img_description_logo">Logo</string>
     <string name="lbl_copyright">Made by Le Tuan Anh and Nguyen Phan Huy</string>
+    <string name="btn_search">Tìm kiếm</string>
 </resources>
