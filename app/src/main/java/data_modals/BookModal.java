@@ -1,8 +1,8 @@
-package modals;
+package data_modals;
 
 import java.util.Date;
 
-public class BookViewModal {
+public class BookModal {
 
     private String name;
     private String author;
@@ -10,9 +10,11 @@ public class BookViewModal {
     private String publisher;
     private String type;
     private Date borrowDate;
+
+    private String borrower;
     private int imageResourceId;
 
-    public BookViewModal(String name, String author, Date publishDate, String publisher, String type, Date borrowDate, int imageResourceId) {
+    public BookModal(String name, String author, Date publishDate, String publisher, String type, Date borrowDate, int imageResourceId) {
         this.name = name;
         this.author = author;
         this.publishDate = publishDate;
@@ -76,5 +78,14 @@ public class BookViewModal {
 
     public void setImageResourceId(int imageResourceId) {
         this.imageResourceId = imageResourceId;
+    }
+
+
+    public String getBorrower() {
+        return borrower;
+    }
+
+    public void setBorrower(String borrower) {
+        this.borrower = borrower;
     }
 }

@@ -29,11 +29,11 @@
         android:layout_weight="5"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/padding20"
-        android:paddingRight="@dimen/padding20">
+        android:paddingLeft="@dimen/horizontal_padding"
+        android:paddingRight="@dimen/horizontal_padding">
 
         <EditText
-            android:id="@+id/edtId"
+            android:id="@+id/edtUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/edt_id_hint"/>
@@ -48,7 +48,8 @@
             android:id="@+id/btnLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btn_login"/>
+            android:text="@string/btn_login"
+            android:onClick=""/>
 
     </LinearLayout>
 

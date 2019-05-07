@@ -13,11 +13,11 @@ import com.example.librarymanager.R;
 
 import java.util.ArrayList;
 
-import modals.BookViewModal;
+import data_modals.BookModal;
 
 public class HorizontalRecycleView extends RecyclerView.Adapter<HorizontalRecycleView.MyViewHolder> {
     private int[] layoutId;
-    private ArrayList<BookViewModal> dataSource;
+    private ArrayList<BookModal> dataSource;
 
     private View.OnClickListener clickListener;
 
