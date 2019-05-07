@@ -8,25 +8,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import data_modals.UserModal;
+import data_modals.BorrowerModal;
 
-public class UserDatabase {
-    private final String NODE_NAME = "users";
-    private final String USER_NAME = "name";
-    private final String USER_PASS = "pass";
+public class BorrowerDatabase {
+    private final String NODE_NAME = "borrowers";
+    private final String BORROWER_NAME = "name";
+    private final String BORROW_BOOK = "borrow_books";
 
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(NODE_NAME);
 
-    private void writeNewUser(UserModal user) {
-        mDatabase.child("users").child(user.getUserId()).child(USER_NAME).setValue(user.getName());
-        mDatabase.child("users").child(user.getUserId()).child(USER_PASS).setValue(user.getPassword());
+    private void writeNewBook(BorrowerModal borrower) {
+        mDatabase.child(borrower.getId() + "").child(BORROWER_NAME).setValue(borrower.getName());
+        mDatabase.child(borrower.getId() + "").child(BORROW_BOOK).setValue(borrower.getBorrowBooks());
     }
 
-    ValueEventListener userListener = new ValueEventListener() {
+    public static ValueEventListener bookListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            UserModal userList = dataSnapshot.getValue(UserModal.class);
-
+            BorrowerModal borrowerList = dataSnapshot.getValue(BorrowerModal.class);
         }
 
         @Override

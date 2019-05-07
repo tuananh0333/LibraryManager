@@ -4,24 +4,28 @@ import java.util.Date;
 
 public class BookModal {
 
+    private int pos;
     private String name;
     private String author;
-    private Date publishDate;
-    private String publisher;
-    private String type;
+    private String category;
     private Date borrowDate;
-
     private String borrower;
     private int imageResourceId;
 
-    public BookModal(String name, String author, Date publishDate, String publisher, String type, Date borrowDate, int imageResourceId) {
+    public BookModal(String name, String author, String type, Date borrowDate, int imageResourceId) {
         this.name = name;
         this.author = author;
-        this.publishDate = publishDate;
-        this.publisher = publisher;
-        this.type = type;
+        this.category = type;
         this.borrowDate = borrowDate;
         this.imageResourceId = imageResourceId;
+    }
+
+    public int getPos() {
+        return pos;
+    }
+
+    public void setPos(int pos) {
+        this.pos = pos;
     }
 
     public String getName() {
@@ -40,28 +44,12 @@ public class BookModal {
         this.author = author;
     }
 
-    public Date getPublishDate() {
-        return publishDate;
+    public String getCategory() {
+        return category;
     }
 
-    public void setPublishDate(Date publishDate) {
-        this.publishDate = publishDate;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public Date getBorrowDate() {
@@ -79,7 +67,6 @@ public class BookModal {
     public void setImageResourceId(int imageResourceId) {
         this.imageResourceId = imageResourceId;
     }
-
 
     public String getBorrower() {
         return borrower;
