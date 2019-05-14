@@ -1,9 +1,9 @@
-package databases;
+package com.example.librarymanager.databases;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import data_modals.CategoryModal;
+import com.example.librarymanager.data_modals.CategoryModal;
 
 public class CategoryDatabase {
     private final String NODE_NAME = "categories";
@@ -15,7 +15,7 @@ public class CategoryDatabase {
         mDatabase.child(category.getId() + "").setValue(category.getName());
     }
 
-    public DatabaseReference getDatabase() {
+    public DatabaseReference getReference() {
         return mDatabase;
     }
 }

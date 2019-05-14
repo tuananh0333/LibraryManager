@@ -12,10 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity
-            android:name=".AddBookActivity"
-            android:label="@string/add_book">
-        </activity>
 
         <activity android:name=".LoginActivity">
             <intent-filter>

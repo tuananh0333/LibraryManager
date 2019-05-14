@@ -1,14 +1,12 @@
 package com.example.librarymanager;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,12 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-
-import databases.BookDatabase;
 
 public class LoginActivity extends AppCompatActivity {
     private final String TITLE = "Đăng nhập";
@@ -76,34 +69,33 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("Login: ", "signInWithEmail:success");
-                        FirebaseUser user = mAuth.getCurrentUser();
+                        FirebaseUser user;
 
                         user = FirebaseAuth.getInstance().getCurrentUser();
                         if (user != null) {
-                            // Name, email address, and profile photo Url
-                            String name = user.getDisplayName();
-                            String email = user.getEmail();
-                            Uri photoUrl = user.getPhotoUrl();
+                            updateUI(user);
 
-                            // Check if user's email is verified
-                            boolean emailVerified = user.isEmailVerified();
+                            // TODO Láy thông tin người dùng
 
                             // The user's ID, unique to the Firebase project. Do NOT use this value to
                             // authenticate with your backend server, if you have one. Use
                             // FirebaseUser.getIdToken() instead.
+                            /*
                             String uid = user.getUid();
-
+                            // Name, email address, and profile photo Url
+                            String name = user.getDisplayName();
+                            String email = user.getEmail();
                             Log.d("User email: ", email);
                             Log.d("User uid: ", uid);
+                            */
                         }
 
-                            updateUI(user);
+
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("Login: ", "signInWithEmail:failure", task.getException());
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
-                        updateUI(null);
                     }
                 }
             });
@@ -111,24 +103,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         //TODO Tạo intent để chuyển qua mục người dùng / quản lý
+        //TODO Kiểm tra kiểu user
         if (user != null)
         {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
         }
     }
-
-    ValueEventListener bookListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-    };
 
     @Override
     protected void onStart() {

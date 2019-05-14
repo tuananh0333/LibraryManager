@@ -1,4 +1,4 @@
-package data_modals;
+package com.example.librarymanager.data_modals;
 
 public class CategoryModal {
     private String id;

@@ -1,20 +1,30 @@
 <resources>
     <string name="app_name">LibraryManager</string>
 
+    <!--EDIT TEXT-->
     <string name="edt_id_hint">Mã đăng nhập</string>
     <string name="edt_search_param_hint">Tên sách, tác giả, &#8230;</string>
     <string name="edt_password_hint">Mật khẩu</string>
+
+    <!--BUTTON-->
     <string name="btn_login">Đăng nhập</string>
-    <string name="img_description_logo">Logo</string>
-    <string name="lbl_copyright">Made by Le Tuan Anh and Nguyen Phan Huy</string>
     <string name="btn_search">Tìm kiếm</string>
-    <string name="main_menu_addbook">Thêm sách mới</string>
-    <string name="book_name">Tên sách</string>
-    <string name="category">Thể loại</string>
-    <string name="author">Tác giả</string>
     <string name="btn_add">Thêm</string>
     <string name="btn_cancel">Hủy</string>
-    <string name="add_book">Thêm sách</string>
+
+    <!--IMAGE DESCRIPTION-->
+    <string name="img_description_logo">Logo</string>
+
+    <!--LABEL-->
+    <string name="lbl_copyright">Made by Le Tuan Anh and Nguyen Phan Huy</string>
+
+    <!--TITLE-->
+    <string name="title_add_book">Thêm sách mới</string>
+
+    <!--TEXT VIEW-->
+    <string name="txt_book_name">Tên sách</string>
+    <string name="txt_category">Thể loại</string>
+    <string name="txt_author">Tác giả</string>
 
     <string name="sideNavBarDescription">Navigation header</string>
     <string name="writtenBy">Written by Nguyen Phan Huy</string>
@@ -22,4 +32,5 @@
 
     <string name="openDrawer">Mở drawer</string>
     <string name="closeDrawer">Đóng drawer</string>
+    <string name="book_hint">Tên sách không bao gồm kí tự đặc biệt và không quá 250 kí tự</string>
 </resources>

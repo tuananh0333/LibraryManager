@@ -4,5 +4,5 @@
 
     <item
         android:id="@+id/mnuAddBook"
-        android:title="@string/main_menu_addbook" />
+        android:title="@string/title_add_book" />
 </menu>

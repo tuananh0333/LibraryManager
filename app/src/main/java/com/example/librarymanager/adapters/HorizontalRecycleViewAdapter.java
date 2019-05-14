@@ -1,4 +1,4 @@
-package adapters;
+package com.example.librarymanager.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -13,11 +13,9 @@ import com.example.librarymanager.R;
 
 import java.util.ArrayList;
 
-import data_modals.BookModal;
-
-public class HorizontalRecycleView extends RecyclerView.Adapter<HorizontalRecycleView.MyViewHolder> {
-    private int[] layoutId;
-    private ArrayList<BookModal> dataSource;
+public class HorizontalRecycleViewAdapter extends RecyclerView.Adapter<HorizontalRecycleViewAdapter.MyViewHolder> {
+    private int layoutId;
+    private ArrayList dataSource;
 
     private View.OnClickListener clickListener;
 
@@ -25,14 +23,14 @@ public class HorizontalRecycleView extends RecyclerView.Adapter<HorizontalRecycl
         this.clickListener = clickListener;
     }
 
-    public HorizontalRecycleView(int[] layoutId, ArrayList dataSource) {
+    public HorizontalRecycleViewAdapter(int layoutId, ArrayList dataSource) {
         this.layoutId = layoutId;
         this.dataSource = dataSource;
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
         CardView cardView = (CardView) inflater.inflate(i, viewGroup, false);
@@ -47,13 +45,14 @@ public class HorizontalRecycleView extends RecyclerView.Adapter<HorizontalRecycl
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        myViewHolder.imageView.setImageDrawable(myViewHolder.imageView.getResources().getDrawable(dataSource.get(i).getImageResourceId()));
-        myViewHolder.textView.setText(dataSource.get(i).getName());
+        //TODO Get name and image from firestore
+        myViewHolder.imageView.setImageDrawable(myViewHolder.imageView.getResources().getDrawable(R.drawable.common_google_signin_btn_text_light));
+        myViewHolder.textView.setText("abc");
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return dataSource.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -63,6 +62,24 @@ public class HorizontalRecycleView extends RecyclerView.Adapter<HorizontalRecycl
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            imageView = itemView.findViewById(R.id.imgBookImage);
+            textView = itemView.findViewById(R.id.txtBookName);
         }
+    }
+
+
+    public void clear()
+    {
+        dataSource.clear();
+        super.notifyDataSetChanged();
+    }
+
+    public ArrayList getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(ArrayList dataSource) {
+        this.dataSource = dataSource;
     }
 }
