@@ -1,14 +1,13 @@
 package com.example.librarymanager;
 
 import android.content.Intent;
-import android.os.Debug;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +22,8 @@ import databases.BookDatabase;
 import databases.CategoryDatabase;
 
 public class MainActivity extends AppCompatActivity {
+    private final String TITLE = "QUẢN LÝ THƯ VIỆN";
+
     ArrayAdapter<String> bookAdapter;
     ArrayAdapter<String> categoryAdapter;
 
@@ -31,6 +32,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout_with_drawer);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(TITLE);
+
+            // Add drawer
+            addDrawerToggle(actionBar);
+        }
+
+        // Init database
         BookDatabase bookDatabase = new BookDatabase();
         CategoryDatabase categoryDatabase = new CategoryDatabase();
 
@@ -43,9 +53,11 @@ public class MainActivity extends AppCompatActivity {
         categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         DatabaseReference categoryReference = categoryDatabase.getDatabase();
         categoryReference.addValueEventListener(categoryListener);
+    }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    private void addDrawerToggle(ActionBar actionBar){
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        final DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.openDrawer, R.string.closeDrawer);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
@@ -56,11 +68,11 @@ public class MainActivity extends AppCompatActivity {
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             bookAdapter.clear();
             for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    if (data.getValue() != null) {
-                        String key = data.getKey();
-                        String value = data.getValue().toString();
-                        bookAdapter.add(key + "\n" + value);
-                    }
+                if (data.getValue() != null) {
+                    String key = data.getKey();
+                    String value = data.getValue().toString();
+                    bookAdapter.add(key + "\n" + value);
+                }
             }
         }
 
@@ -75,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             bookAdapter.clear();
             for (DataSnapshot data : dataSnapshot.getChildren()) {
-                if (data != null) {
+                if (data.getValue() != null) {
                     String key = data.getKey();
                     String value = data.getValue().toString();
                     categoryAdapter.add(key + "\n" + value);
@@ -101,11 +113,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.mnuAddBook) {
-            //TODO Mở màn hình thêm
             Intent intent = new Intent(MainActivity.this, AddBookActivity.class);
             startActivity(intent);
         } else {
-            DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            // Kiểm tra xem drawer có mở hay không
+            DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.closeDrawer(GravityCompat.START);
             } else {

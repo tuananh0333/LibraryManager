@@ -3,6 +3,7 @@ package com.example.librarymanager;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import databases.BookDatabase;
 
 public class LoginActivity extends AppCompatActivity {
+    private final String TITLE = "Đăng nhập";
 
     private Button btnLogin;
     private EditText edtUsername, edtPassword;
@@ -36,6 +38,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
+
+        // Change action bar title
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(TITLE);
+        }
 
         mAuth = FirebaseAuth.getInstance();
 

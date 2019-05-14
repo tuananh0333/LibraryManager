@@ -1,6 +1,7 @@
 package com.example.librarymanager;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,8 @@ import databases.BookDatabase;
 import databases.CategoryDatabase;
 
 public class AddBookActivity extends AppCompatActivity {
+    private final String TITLE = "Thêm sách";
+
     private ArrayAdapter<String> bookAdapter;
     private ArrayAdapter<String> categoryAdapter;
 
@@ -32,6 +35,11 @@ public class AddBookActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_book_layout);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(TITLE);
+        }
 
         Button btnAdd = findViewById(R.id.btnAdd);
         Button btnCancel = findViewById(R.id.btnCancel);

@@ -14,6 +14,7 @@
     <string name="author">Tác giả</string>
     <string name="btn_add">Thêm</string>
     <string name="btn_cancel">Hủy</string>
+    <string name="add_book">Thêm sách</string>
 
     <string name="sideNavBarDescription">Navigation header</string>
     <string name="writtenBy">Written by Nguyen Phan Huy</string>

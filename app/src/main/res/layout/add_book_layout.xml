@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/book_name"
+        android:labelFor="@id/edtBookName"
         tools:layout_editor_absoluteX="88dp"
         tools:layout_editor_absoluteY="89dp" />
 
@@ -24,6 +25,7 @@
         tools:layout_editor_absoluteY="137dp" />
 
     <TextView
+        android:labelFor="@id/spnBookCategory"
         android:id="@+id/edtBookCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,6 +41,7 @@
         tools:layout_editor_absoluteY="253dp" />
 
     <TextView
+        android:labelFor="@id/edtAuthor"
         android:id="@+id/txtAuthor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
