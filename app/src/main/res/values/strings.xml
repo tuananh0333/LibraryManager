@@ -18,4 +18,7 @@
     <string name="sideNavBarDescription">Navigation header</string>
     <string name="writtenBy">Written by Nguyen Phan Huy</string>
     <string name="email">17211tt3242@mail.tdc.edu.vn</string>
+
+    <string name="openDrawer">Mở drawer</string>
+    <string name="closeDrawer">Đóng drawer</string>
 </resources>

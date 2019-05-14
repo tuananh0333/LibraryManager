@@ -1,9 +1,14 @@
 package com.example.librarymanager;
 
 import android.content.Intent;
+import android.os.Debug;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
         categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         DatabaseReference categoryReference = categoryDatabase.getDatabase();
         categoryReference.addValueEventListener(categoryListener);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.openDrawer, R.string.closeDrawer);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
     }
 
     ValueEventListener bookListener = new ValueEventListener() {
@@ -93,6 +104,13 @@ public class MainActivity extends AppCompatActivity {
             //TODO Mở màn hình thêm
             Intent intent = new Intent(MainActivity.this, AddBookActivity.class);
             startActivity(intent);
+        } else {
+            DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
         }
 
         return super.onOptionsItemSelected(item);
