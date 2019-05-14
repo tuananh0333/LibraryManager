@@ -63,9 +63,6 @@ public class HorizontalRecycleView extends RecyclerView.Adapter<HorizontalRecycl
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            imageView = itemView.findViewById(R.id.image_view);
-            textView = itemView.findViewById(R.id.text_view);
         }
     }
 }

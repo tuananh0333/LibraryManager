@@ -1,5 +1,6 @@
 package com.example.librarymanager;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -102,21 +103,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         //TODO Tạo intent để chuyển qua mục người dùng / quản lý
-
-        BookDatabase db = new BookDatabase();
-        DatabaseReference dr = db.getDatabase();
-        dr.addValueEventListener(bookListener);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     ValueEventListener bookListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            for (DataSnapshot data : dataSnapshot)
-            {
 
-            }
-//            BookModal bookList = dataSnapshot.getValue(BookModal.class);
-            Log.d("data", dataSnapshot.);
         }
 
         @Override

@@ -34,12 +34,14 @@
 
         <EditText
             android:id="@+id/edtUsername"
+            android:inputType="textAutoComplete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/edt_id_hint"/>
 
         <EditText
             android:id="@+id/edtPassword"
+            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/edt_password_hint" />

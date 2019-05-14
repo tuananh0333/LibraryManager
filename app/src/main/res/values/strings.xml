@@ -8,4 +8,10 @@
     <string name="img_description_logo">Logo</string>
     <string name="lbl_copyright">Made by Le Tuan Anh and Nguyen Phan Huy</string>
     <string name="btn_search">Tìm kiếm</string>
+    <string name="main_menu_addbook">Thêm sách mới</string>
+    <string name="book_name">Tên sách</string>
+    <string name="category">Thể loại</string>
+    <string name="author">Tác giả</string>
+    <string name="btn_add">Thêm</string>
+    <string name="btn_cancel">Hủy</string>
 </resources>

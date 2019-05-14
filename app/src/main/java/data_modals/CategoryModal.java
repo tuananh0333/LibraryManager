@@ -1,12 +1,12 @@
 package data_modals;
 
-public class BorrowerModal {
+public class CategoryModal {
     private String id;
     private String name;
-    private String[] borrowBooks;
 
-    public BorrowerModal(String id) {
+    public CategoryModal(String id, String name) {
         this.id = id;
+        this.name = name;
     }
 
     public String getId() {
@@ -24,14 +24,4 @@ public class BorrowerModal {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String[] getBorrowBooks() {
-        return borrowBooks;
-    }
-
-    public void setBorrowBooks(String[] borrowBooks) {
-        this.borrowBooks = borrowBooks;
-    }
-
-
 }

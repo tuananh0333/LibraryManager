@@ -10,13 +10,15 @@ public class BookModal {
     private String category;
     private Date borrowDate;
     private String borrower;
+    // TODO Change imageResource to image from file or camera
     private int imageResourceId;
 
-    public BookModal(String name, String author, String type, Date borrowDate, int imageResourceId) {
+    public BookModal(String name, String author, String type, int imageResourceId) {
         this.name = name;
         this.author = author;
         this.category = type;
-        this.borrowDate = borrowDate;
+        this.borrowDate = null;
+        this.borrower = "";
         this.imageResourceId = imageResourceId;
     }
 
