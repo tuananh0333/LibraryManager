@@ -103,8 +103,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         //TODO Tạo intent để chuyển qua mục người dùng / quản lý
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
+        if (user != null)
+        {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     ValueEventListener bookListener = new ValueEventListener() {

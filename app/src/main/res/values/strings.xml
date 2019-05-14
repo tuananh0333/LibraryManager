@@ -14,4 +14,8 @@
     <string name="author">Tác giả</string>
     <string name="btn_add">Thêm</string>
     <string name="btn_cancel">Hủy</string>
+
+    <string name="sideNavBarDescription">Navigation header</string>
+    <string name="writtenBy">Written by Nguyen Phan Huy</string>
+    <string name="email">17211tt3242@mail.tdc.edu.vn</string>
 </resources>

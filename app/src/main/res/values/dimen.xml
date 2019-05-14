@@ -4,4 +4,8 @@
     <dimen name="card_corner_radius">4dp</dimen>
     <dimen name="card_elevation">4dp</dimen>
     <dimen name="layout_margin">5dp</dimen>
+
+    <dimen name="side_nav_bar_padding">16dp</dimen>
+    <dimen name="side_nav_bar_child_padding">8dp</dimen>
+    <dimen name="side_nav_bar_contentHeight">192dp</dimen>
 </resources>

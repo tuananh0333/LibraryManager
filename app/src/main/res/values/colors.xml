@@ -6,4 +6,8 @@
 
     <color name="white">#fff</color>
     <color name="red">#ff0000</color>
+
+    <color name="sideNavBarCenter">#009688</color>
+    <color name="sideNavBarEnd">#00695C</color>
+    <color name="sideNavBarStart">#4DB6AC</color>
 </resources>
