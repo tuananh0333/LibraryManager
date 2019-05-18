@@ -1,10 +1,10 @@
-package com.example.librarymanager.data_modals;
+package com.example.librarymanager.models;
 
-public class CategoryModal {
+public class CategoryModel {
     private String id;
     private String name;
 
-    public CategoryModal(String id, String name) {
+    public CategoryModel(String id, String name) {
         this.id = id;
         this.name = name;
     }

@@ -1,51 +1,49 @@
-package com.example.librarymanager;
+package com.example.librarymanager.views;
 
 import android.app.Dialog;
-import android.content.Intent;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
+import com.example.librarymanager.R;
+import com.example.librarymanager.adapters.HorizontalRecycleViewAdapter;
+import com.example.librarymanager.fragments.AbstractCustomFragment;
+import com.example.librarymanager.fragments.BookListFragment;
+import com.example.librarymanager.models.BookModel;
+import com.example.librarymanager.models.CategoryModel;
+
 
 import java.util.ArrayList;
-
-import com.example.librarymanager.adapters.BookAdapter;
-import com.example.librarymanager.adapters.CategoryAdapter;
-import com.example.librarymanager.data_modals.BookModal;
-import com.example.librarymanager.data_modals.CategoryModal;
-import com.example.librarymanager.databases.BookDatabase;
-import com.example.librarymanager.databases.CategoryDatabase;
 
 public class MainActivity extends AppCompatActivity {
     private final String TITLE = "QUẢN LÝ THƯ VIỆN";
 
-    DatabaseReference bookReference;
+    private DrawerLayout drawerLayout;
 
-    BookAdapter bookAdapter;
-    CategoryAdapter categoryAdapter;
+    private HorizontalRecycleViewAdapter bookAdapter;
+    private HorizontalRecycleViewAdapter categoryAdapter;
 
-    DrawerLayout drawerLayout;
-    ListView categoryList;
-    ListView bookList;
+    private RecyclerView categoryList;
+    private RecyclerView bookList;
+
+    private ArrayList<CategoryModel> categoryDataSource;
+    private ArrayList<BookModel> bookDataSource;
+
+    private AbstractCustomFragment fragment;
+    private FragmentTransaction fragmentTransaction;
 
     int currentCategoryId;
 
@@ -61,91 +59,105 @@ public class MainActivity extends AppCompatActivity {
             // Add drawer
             addDrawerToggle(actionBar);
         }
-        drawerLayout = findViewById(R.id.drawer_layout);
-        categoryList = findViewById(R.id.category_list);
-        bookList = findViewById(R.id.book_list);
 
-        initBook();
-        initCategory();
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        updateUI();
+//        categoryList = findViewById(R.id.table_list);
+//        bookList = findViewById(R.id.book_list);
+
+//        initBook();
+//        initCategory();
 
     }
 
+    /*
     private void initCategory()
     {
-        //Set up database
-        CategoryDatabase categoryDatabase = new CategoryDatabase();
+        // Set up Recycle View
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this);
+        horizontalLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        categoryList.setLayoutManager(horizontalLayoutManager);
 
-        // Get reference
-        DatabaseReference categoryReference = categoryDatabase.getReference();
-        categoryReference.addValueEventListener(categoryListener);
+        // Set up data source
+        categoryDataSource = new ArrayList<>();
+
+        // Set up database
+        CategoryDatabase categoryDatabase = new CategoryDatabase();
+        categoryDatabase.setValueEventListener(categoryListener);
 
         // Set up adapter
-        categoryAdapter = new CategoryAdapter(this, R.layout.category_view_layout, new ArrayList<CategoryModal>());
-
-        // Set up custom list
-        categoryList.setOnItemClickListener(onCategoryItemCLick);
+        categoryAdapter = new HorizontalRecycleViewAdapter(R.layout.category_view_layout, categoryDataSource);
+        categoryAdapter.setClickListener(onCategoryClick);
         categoryList.setAdapter(categoryAdapter);
     }
 
     private void initBook()
     {
-        //Set up database
-        BookDatabase bookDatabase = new BookDatabase();
+        // Setup Recycle View
+        LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(this);
+        verticalLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        bookList.setLayoutManager(verticalLayoutManager);
 
-        // Get reference
-        bookReference = bookDatabase.getReference();
-        bookReference.addValueEventListener(bookListener);
+        // Set up data source
+        bookDataSource = new ArrayList<>();
+
+        // Set up database
+        BookDatabase bookDatabase = new BookDatabase();
+        bookDatabase.setValueEventListener(bookListener);
 
         // Set up adapter
-        bookAdapter = new BookAdapter(this, R.layout.book_view_layout, new ArrayList<BookModal>());
-
-        // Set up custom list
-        bookList.setOnItemClickListener(onBookItemClick);
+        bookAdapter = new HorizontalRecycleViewAdapter(R.layout.book_view_layout, bookDataSource);
+        bookAdapter.setClickListener(onBookClick);
         bookList.setAdapter(bookAdapter);
     }
 
-    AdapterView.OnItemClickListener onCategoryItemCLick = new AdapterView.OnItemClickListener() {
+    View.OnClickListener onCategoryClick = new View.OnClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            currentCategoryId = position;
+        public void onClick(View v) {
+            currentCategoryId = categoryList.getChildAdapterPosition(v);
             drawerLayout.closeDrawer(GravityCompat.START);
 
-            // TODO User click vào book -> Chuyển activity
-//            fragment.updateUserInteraction(questionID);
             // TODO User click vào category -> load lại adapter
+//            fragment.updateUserInteraction(questionID);
+            updateUI();
+        }
+    };
+
+    View.OnClickListener onBookClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+
+            // TODO User click vào category -> load lại adapter
+//            fragment.updateUserInteraction(questionID);
 //            updateUI();
         }
     };
 
-    AdapterView.OnItemClickListener onBookItemClick = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-
-            // TODO User click vào book -> Chuyển activity
-//            fragment.updateUserInteraction(questionID);
-            // TODO User click vào category -> load lại adapter
-//            updateUI();
-        }
-    };
+    */
 
     private void addDrawerToggle(ActionBar actionBar){
         actionBar.setDisplayHomeAsUpEnabled(true);
+
         final DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.openDrawer, R.string.closeDrawer);
         drawerLayout.addDrawerListener(drawerToggle);
+
         drawerToggle.syncState();
     }
 
+    /*
     ValueEventListener bookListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            bookAdapter.clear();
+            bookDataSource.clear();
 
             for (DataSnapshot data : dataSnapshot.getChildren()) {
                 if (data.getValue() != null) {
-                    BookModal book = data.getValue(BookModal.class);
-                    bookAdapter.add(book);
+                    BookModel book = data.getValue(BookModel.class);
+                    bookDataSource.add(book);
                 }
             }
 
@@ -162,15 +174,15 @@ public class MainActivity extends AppCompatActivity {
     ValueEventListener categoryListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            categoryAdapter.clear();
+            categoryDataSource.clear();
 
             for (DataSnapshot data : dataSnapshot.getChildren()) {
                 if (data.getValue() != null) {
                     String id = data.getKey();
                     String name = data.getValue().toString();
 
-                    CategoryModal category = new CategoryModal(id, name);
-                    categoryAdapter.add(category);
+                    CategoryModel category = new CategoryModel(id, name);
+                    categoryDataSource.add(category);
                 }
             }
 
@@ -183,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
+    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -196,13 +209,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.mnuAddBook) {
+//            fragment = new AddBookFragment();
+//
+//            fragmentTransaction = getFragmentManager().beginTransaction();
+//
+//            fragmentTransaction.replace(R.id.fragment_container, fragment);
+
+            // TODO chuyển thành activity
             final Dialog dialog = new Dialog(MainActivity.this);
             dialog.setTitle("Add");
             dialog.setContentView(R.layout.add_book_layout);
 
             ArrayList<String> data = new ArrayList<>();
 
-            for (CategoryModal category : categoryAdapter.getCategoryLists()) {
+            for (CategoryModel category : categoryDataSource) {
                 data.add(category.getName());
             }
 
@@ -227,9 +247,11 @@ public class MainActivity extends AppCompatActivity {
                     Spinner spnCategory = dialog.findViewById(R.id.spnBookCategory);
                     // TODO Thêm ảnh
 
-                    BookModal book =new BookModal(edtName.getText().toString(), edtAuthor.getText().toString(), spnCategory.getSelectedItemId() + "", "");
+                    BookModel book = new BookModel(edtName.getText().toString(),
+                            edtAuthor.getText().toString(),
+                            spnCategory.getSelectedItemId() + "",
+                            "");
 
-                    bookReference.child("book1").setValue(book);
 
                 }
             });
@@ -250,5 +272,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
+        fragment = new BookListFragment();
+        fragmentTransaction = getFragmentManager().beginTransaction();
+
+        fragmentTransaction.replace(R.id.main_fragment, fragment, "book_list");
+        fragmentTransaction.commit();
     }
 }

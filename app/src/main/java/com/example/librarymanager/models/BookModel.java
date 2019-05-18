@@ -1,9 +1,7 @@
-package com.example.librarymanager.data_modals;
+package com.example.librarymanager.models;
 
-import java.util.Date;
-
-public class BookModal {
-
+public class BookModel {
+    private String id;
     private String name;
     private String author;
     private String category;
@@ -12,16 +10,23 @@ public class BookModal {
     // TODO Change imageResource to image from file or camera
     private String imageResourceUrl;
 
-    public BookModal() {
-    }
+    public BookModel() { }
 
-    public BookModal(String name, String author, String type, String imageResourceUrl) {
+    public BookModel(String name, String author, String type, String imageResourceUrl) {
         this.name = name;
         this.author = author;
         this.category = type;
 //        this.borrowDate = null;
 //        this.borrower = "";
         this.imageResourceUrl = imageResourceUrl;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

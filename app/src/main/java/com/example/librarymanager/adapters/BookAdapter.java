@@ -10,16 +10,17 @@ import android.widget.TextView;
 
 import com.example.librarymanager.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.example.librarymanager.data_modals.BookModal;
+import com.example.librarymanager.models.BookModel;
 
-public class BookAdapter extends ArrayAdapter<BookModal> {
+public class BookAdapter extends ArrayAdapter<BookModel> {
     private Context context;
     private int resource;
-    private List<BookModal> bookLists;
+    private List<BookModel> bookLists;
 
-    public BookAdapter(Context context, int resource, List<BookModal> bookLists) {
+    public BookAdapter(Context context, int resource, List<BookModel> bookLists) {
         super(context, resource, bookLists);
         this.context = context;
         this.resource = resource;
@@ -41,17 +42,17 @@ public class BookAdapter extends ArrayAdapter<BookModal> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        BookModal book = bookLists.get(position);
+        BookModel book = bookLists.get(position);
         viewHolder.txtBookName.setText(book.getName());
 
         return convertView;
     }
 
-    public List<BookModal> getBookLists() {
+    public List<BookModel> getBookLists() {
         return bookLists;
     }
 
-    public void setBookLists(List<BookModal> bookLists) {
+    public void setBookLists(List<BookModel> bookLists) {
         this.bookLists = bookLists;
     }
 

@@ -12,14 +12,14 @@ import com.example.librarymanager.R;
 
 import java.util.List;
 
-import com.example.librarymanager.data_modals.CategoryModal;
+import com.example.librarymanager.models.CategoryModel;
 
-public class CategoryAdapter extends ArrayAdapter<CategoryModal> {
+public class CategoryAdapter extends ArrayAdapter<CategoryModel> {
     private Context context;
     private int resource;
-    private List<CategoryModal> categoryLists;
+    private List<CategoryModel> categoryLists;
 
-    public CategoryAdapter(Context context, int resource, List<CategoryModal> categoryLists) {
+    public CategoryAdapter(Context context, int resource, List<CategoryModel> categoryLists) {
         super(context, resource, categoryLists);
         this.context = context;
         this.resource = resource;
@@ -34,24 +34,24 @@ public class CategoryAdapter extends ArrayAdapter<CategoryModal> {
             convertView = LayoutInflater.from(context).inflate(R.layout.category_view_layout, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.txtBookName = (TextView) convertView.findViewById(R.id.txtBookName);
-            viewHolder.imgBookImage = (ImageView) convertView.findViewById(R.id.imgBookImage);
+            viewHolder.imgBookImage = (ImageView) convertView.findViewById(R.id.imgBook);
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        CategoryModal category = categoryLists.get(position);
+        CategoryModel category = categoryLists.get(position);
         viewHolder.txtBookName.setText(category.getName());
 
         return convertView;
     }
 
-    public List<CategoryModal> getCategoryLists() {
+    public List<CategoryModel> getCategoryLists() {
         return categoryLists;
     }
 
-    public void setCategoryLists(List<CategoryModal> categoryLists) {
+    public void setCategoryLists(List<CategoryModel> categoryLists) {
         this.categoryLists = categoryLists;
     }
 

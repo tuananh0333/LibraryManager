@@ -1,0 +1,173 @@
+package com.example.librarymanager.fragments;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.example.librarymanager.R;
+import com.example.librarymanager.adapters.HorizontalRecycleViewAdapter;
+import com.example.librarymanager.databases.BookDatabase;
+import com.example.librarymanager.databases.CategoryDatabase;
+import com.example.librarymanager.models.BookModel;
+import com.example.librarymanager.models.CategoryModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
+public class BookListFragment extends AbstractCustomFragment {
+    private EditText edtSearchParam;
+    private Button btnSearch;
+    private RecyclerView categoryRecyclerView, bookRecyclerView;
+    private DrawerLayout drawerLayout;
+
+    private HorizontalRecycleViewAdapter bookAdapter, categoryAdapter;
+
+    private ArrayList<CategoryModel> categoryDataSource;
+    private ArrayList<BookModel> bookDataSource;
+
+    private int currentCategoryId;
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view;
+        view = inflater.inflate(R.layout.main_layout, container, false);
+
+        edtSearchParam = view.findViewById(R.id.edtSearchParam);
+        btnSearch = view.findViewById(R.id.btnSearch);
+        drawerLayout = view.findViewById(R.id.drawer_layout);
+
+        bookRecyclerView = view.findViewById(R.id.book_list);
+        categoryRecyclerView = view.findViewById(R.id.category_list);
+
+        initBook(getActivity());
+        initCategory(getActivity());
+
+        return view;
+    }
+
+    private void initCategory(Context context)
+    {
+        // Set up Recycle View
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(context);
+        horizontalLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        categoryRecyclerView.setLayoutManager(horizontalLayoutManager);
+
+        // Set up data source
+        categoryDataSource = new ArrayList<>();
+
+        // Set up database
+        CategoryDatabase categoryDatabase = new CategoryDatabase();
+        categoryDatabase.setValueEventListener(categoryListener);
+
+        // Set up adapter
+        categoryAdapter = new HorizontalRecycleViewAdapter(R.layout.category_view_layout, categoryDataSource);
+        categoryAdapter.setClickListener(onCategoryClick);
+        categoryRecyclerView.setAdapter(categoryAdapter);
+    }
+
+    private void initBook(Context context)
+    {
+        // Setup Recycle View
+        LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(context);
+        verticalLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        bookRecyclerView.setLayoutManager(verticalLayoutManager);
+
+        // Set up data source
+        bookDataSource = new ArrayList<>();
+
+        // Set up database
+        BookDatabase bookDatabase = new BookDatabase();
+        bookDatabase.setValueEventListener(bookListener);
+
+        // Set up adapter
+        bookAdapter = new HorizontalRecycleViewAdapter(R.layout.book_view_layout, bookDataSource);
+        bookAdapter.setClickListener(onBookClick);
+        bookRecyclerView.setAdapter(bookAdapter);
+    }
+
+    View.OnClickListener onCategoryClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            currentCategoryId = categoryRecyclerView.getChildAdapterPosition(v);
+            drawerLayout.closeDrawer(GravityCompat.START);
+
+            // TODO User click vào category -> load lại adapter
+//            fragment.updateUserInteraction(questionID);
+            updateUI();
+        }
+    };
+
+    View.OnClickListener onBookClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+
+            // TODO User click vào category -> load lại adapter
+//            fragment.updateUserInteraction(questionID);
+//            updateUI();
+        }
+    };
+
+    ValueEventListener bookListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            bookDataSource.clear();
+
+            for (DataSnapshot data : dataSnapshot.getChildren()) {
+                if (data.getValue() != null) {
+                    BookModel book = data.getValue(BookModel.class);
+                    bookDataSource.add(book);
+                }
+            }
+
+            bookAdapter.notifyDataSetChanged();
+            updateUI();
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    ValueEventListener categoryListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            categoryDataSource.clear();
+
+            for (DataSnapshot data : dataSnapshot.getChildren()) {
+                if (data.getValue() != null) {
+                    String id = data.getKey();
+                    String name = data.getValue().toString();
+
+                    CategoryModel category = new CategoryModel(id, name);
+                    categoryDataSource.add(category);
+                }
+            }
+
+            categoryAdapter.notifyDataSetChanged();
+            updateUI();
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    private void updateUI() {
+    }
+}

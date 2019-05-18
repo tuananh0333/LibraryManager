@@ -12,7 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="5"
         android:orientation="vertical">
         <TextView
             android:id="@+id/txtBookName"
@@ -23,9 +23,8 @@
 
         <EditText
             android:id="@+id/edtBookName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:inputType="textPersonName" />
 
         <TextView
@@ -50,9 +49,8 @@
 
         <EditText
             android:id="@+id/edtAuthor"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:inputType="textPersonName" />
     </LinearLayout>
 
