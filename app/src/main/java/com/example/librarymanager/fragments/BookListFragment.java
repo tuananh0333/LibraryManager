@@ -1,42 +1,34 @@
 package com.example.librarymanager.fragments;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.example.librarymanager.R;
 import com.example.librarymanager.adapters.HorizontalRecycleViewAdapter;
 import com.example.librarymanager.databases.BookDatabase;
 import com.example.librarymanager.databases.CategoryDatabase;
+import com.example.librarymanager.databases.DataStorage;
 import com.example.librarymanager.models.BookModel;
 import com.example.librarymanager.models.CategoryModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-
 public class BookListFragment extends AbstractCustomFragment {
-    private EditText edtSearchParam;
-    private Button btnSearch;
     private RecyclerView categoryRecyclerView, bookRecyclerView;
-    private DrawerLayout drawerLayout;
 
     private HorizontalRecycleViewAdapter bookAdapter, categoryAdapter;
 
-    private ArrayList<CategoryModel> categoryDataSource;
-    private ArrayList<BookModel> bookDataSource;
+    private AbstractCustomFragment fragment;
+    private FragmentTransaction fragmentTransaction;
 
     private int currentCategoryId;
 
@@ -45,12 +37,7 @@ public class BookListFragment extends AbstractCustomFragment {
         View view;
         view = inflater.inflate(R.layout.main_layout, container, false);
 
-        edtSearchParam = view.findViewById(R.id.edtSearchParam);
-        btnSearch = view.findViewById(R.id.btnSearch);
-        drawerLayout = view.findViewById(R.id.drawer_layout);
-
-        bookRecyclerView = view.findViewById(R.id.book_list);
-        categoryRecyclerView = view.findViewById(R.id.category_list);
+        addControllers(view);
 
         initBook(getActivity());
         initCategory(getActivity());
@@ -65,15 +52,12 @@ public class BookListFragment extends AbstractCustomFragment {
         horizontalLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         categoryRecyclerView.setLayoutManager(horizontalLayoutManager);
 
-        // Set up data source
-        categoryDataSource = new ArrayList<>();
-
         // Set up database
         CategoryDatabase categoryDatabase = new CategoryDatabase();
         categoryDatabase.setValueEventListener(categoryListener);
 
         // Set up adapter
-        categoryAdapter = new HorizontalRecycleViewAdapter(R.layout.category_view_layout, categoryDataSource);
+        categoryAdapter = new HorizontalRecycleViewAdapter(R.layout.category_view_layout, DataStorage.categoryList);
         categoryAdapter.setClickListener(onCategoryClick);
         categoryRecyclerView.setAdapter(categoryAdapter);
     }
@@ -85,15 +69,12 @@ public class BookListFragment extends AbstractCustomFragment {
         verticalLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         bookRecyclerView.setLayoutManager(verticalLayoutManager);
 
-        // Set up data source
-        bookDataSource = new ArrayList<>();
-
         // Set up database
         BookDatabase bookDatabase = new BookDatabase();
         bookDatabase.setValueEventListener(bookListener);
 
         // Set up adapter
-        bookAdapter = new HorizontalRecycleViewAdapter(R.layout.book_view_layout, bookDataSource);
+        bookAdapter = new HorizontalRecycleViewAdapter(R.layout.book_view_layout, DataStorage.bookList);
         bookAdapter.setClickListener(onBookClick);
         bookRecyclerView.setAdapter(bookAdapter);
     }
@@ -102,34 +83,38 @@ public class BookListFragment extends AbstractCustomFragment {
         @Override
         public void onClick(View v) {
             currentCategoryId = categoryRecyclerView.getChildAdapterPosition(v);
-            drawerLayout.closeDrawer(GravityCompat.START);
 
             // TODO User click vào category -> load lại adapter
 //            fragment.updateUserInteraction(questionID);
-            updateUI();
         }
     };
 
     View.OnClickListener onBookClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+            BookModel book = DataStorage.bookList.get(bookRecyclerView.getChildAdapterPosition(v));
 
             // TODO User click vào category -> load lại adapter
-//            fragment.updateUserInteraction(questionID);
-//            updateUI();
+            fragment = new EditBookFragment();
+
+            ((EditBookFragment) fragment).getData(book);
+            fragmentTransaction = getFragmentManager().beginTransaction();
+
+            fragmentTransaction.replace(R.id.main_fragment, fragment, "book_list");
+            fragmentTransaction.commit();
         }
     };
 
     ValueEventListener bookListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            bookDataSource.clear();
+            DataStorage.bookList.clear();
 
             for (DataSnapshot data : dataSnapshot.getChildren()) {
                 if (data.getValue() != null) {
                     BookModel book = data.getValue(BookModel.class);
-                    bookDataSource.add(book);
+                    book.setId(data.getKey());
+                    DataStorage.bookList.add(book);
                 }
             }
 
@@ -146,7 +131,7 @@ public class BookListFragment extends AbstractCustomFragment {
     ValueEventListener categoryListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            categoryDataSource.clear();
+            DataStorage.categoryList.clear();
 
             for (DataSnapshot data : dataSnapshot.getChildren()) {
                 if (data.getValue() != null) {
@@ -154,7 +139,7 @@ public class BookListFragment extends AbstractCustomFragment {
                     String name = data.getValue().toString();
 
                     CategoryModel category = new CategoryModel(id, name);
-                    categoryDataSource.add(category);
+                    DataStorage.categoryList.add(category);
                 }
             }
 
@@ -169,5 +154,21 @@ public class BookListFragment extends AbstractCustomFragment {
     };
 
     private void updateUI() {
+    }
+
+    @Override
+    void finish() {
+
+    }
+
+    @Override
+    void addControllers(View view) {
+        bookRecyclerView = view.findViewById(R.id.book_list);
+        categoryRecyclerView = view.findViewById(R.id.category_list);
+    }
+
+    @Override
+    void addEvents() {
+
     }
 }

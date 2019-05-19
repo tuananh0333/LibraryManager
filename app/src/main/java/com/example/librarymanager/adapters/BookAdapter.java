@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.example.librarymanager.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.example.librarymanager.models.BookModel;
@@ -34,7 +33,7 @@ public class BookAdapter extends ArrayAdapter<BookModel> {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.book_view_layout, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.txtBookName = (TextView) convertView.findViewById(R.id.txtBookName);
+            viewHolder.txtBookName = convertView.findViewById(R.id.txtBookName);
 //            viewHolder.imgBookImage = (ImageView) convertView.findViewById(R.id.imgBookImage);
 
             convertView.setTag(viewHolder);

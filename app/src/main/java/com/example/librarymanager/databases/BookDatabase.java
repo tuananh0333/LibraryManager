@@ -1,5 +1,7 @@
 package com.example.librarymanager.databases;
 
+import android.util.Log;
+
 import com.example.librarymanager.models.BookModel;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -21,34 +23,17 @@ public class BookDatabase {
         reference.addValueEventListener(valueEventListener);
     }
 
-    public void writeNewBook(BookModel book) {
+    public void writeNew(BookModel book) {
+        book.setId(reference.push().getKey());
         reference.child(book.getId()).setValue(book);
     }
 
-    public ArrayList<BookModel> readAllBook() {
-        return data != null ? data : new ArrayList<BookModel>();
+    public void update(BookModel book) {
+        reference.child(book.getId()).setValue(book);
     }
 
-//    private ValueEventListener bookListener = new ValueEventListener() {
-//        @Override
-//        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//            if (data != null) {
-//                data.clear();
-//            } else {
-//                data = new ArrayList<>();
-//            }
-//            ArrayList<BookModel> dataSource = new ArrayList<>();
-//            for (DataSnapshot data : dataSnapshot.getChildren()) {
-//                if (data.getValue() != null) {
-//                    BookModel book = data.getValue(BookModel.class);
-//                    dataSource.add(book);
-//                }
-//            }
-//        }
-//
-//        @Override
-//        public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//        }
-//    };
+    public void delete(String id) {
+
+    }
+
 }

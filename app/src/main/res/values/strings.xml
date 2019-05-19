@@ -11,6 +11,7 @@
     <string name="btn_search">Tìm kiếm</string>
     <string name="btn_add">Thêm</string>
     <string name="btn_cancel">Hủy</string>
+    <string name="btn_update">Cập nhật</string>
 
     <!--IMAGE DESCRIPTION-->
     <string name="img_description_logo">Logo</string>

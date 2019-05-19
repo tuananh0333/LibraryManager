@@ -18,14 +18,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/sideNavBarDescription"
-        android:paddingTop="@dimen/side_nav_bar_child_padding"
+        android:paddingTop="@dimen/child_padding"
         app:srcCompat="@mipmap/ic_launcher" />
         <!--TODO Thêm icon cho ứng dụng-->
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/side_nav_bar_child_padding"
+        android:paddingTop="@dimen/child_padding"
         android:text="@string/writtenBy"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 

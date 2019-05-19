@@ -5,20 +5,19 @@ public class BookModel {
     private String name;
     private String author;
     private String category;
-//    private Date borrowDate;
-//    private String borrower;
+
     // TODO Change imageResource to image from file or camera
-    private String imageResourceUrl;
+    private String image;
 
     public BookModel() { }
 
-    public BookModel(String name, String author, String type, String imageResourceUrl) {
+    public BookModel(String name, String author, String type, String image) {
         this.name = name;
         this.author = author;
         this.category = type;
 //        this.borrowDate = null;
 //        this.borrower = "";
-        this.imageResourceUrl = imageResourceUrl;
+        this.image = image;
     }
 
     public String getId() {
@@ -61,12 +60,12 @@ public class BookModel {
 //        this.borrowDate = borrowDate;
 //    }
 
-    public String getImageResourceUrl() {
-        return imageResourceUrl;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageResourceUrl(String imageResourceUrl) {
-        this.imageResourceUrl = imageResourceUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
 
 //    public String getBorrower() {

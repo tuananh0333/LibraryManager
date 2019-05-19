@@ -33,8 +33,8 @@ public class CategoryAdapter extends ArrayAdapter<CategoryModel> {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.category_view_layout, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.txtBookName = (TextView) convertView.findViewById(R.id.txtBookName);
-            viewHolder.imgBookImage = (ImageView) convertView.findViewById(R.id.imgBook);
+            viewHolder.txtBookName = convertView.findViewById(R.id.txtBookName);
+            viewHolder.imgBookImage = convertView.findViewById(R.id.imgBook);
 
             convertView.setTag(viewHolder);
         } else {
