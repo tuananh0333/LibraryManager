@@ -100,6 +100,7 @@ public class BookListFragment extends AbstractCustomFragment {
             fragmentTransaction = getFragmentManager().beginTransaction();
 
             fragmentTransaction.replace(R.id.main_fragment, fragment, "book_edit");
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
     };
