@@ -1,11 +1,9 @@
 package com.example.librarymanager.fragments;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,9 +25,6 @@ public class BookListFragment extends AbstractCustomFragment {
     private RecyclerView categoryRecyclerView, bookRecyclerView;
 
     private RecycleViewAdapter bookAdapter, categoryAdapter;
-
-    private AbstractCustomFragment fragment;
-    private FragmentTransaction fragmentTransaction;
 
     private int currentCategoryId;
 
@@ -101,6 +96,7 @@ public class BookListFragment extends AbstractCustomFragment {
             fragmentTransaction = getFragmentManager().beginTransaction();
 
             fragmentTransaction.replace(R.id.main_fragment, fragment, "book_edit");
+
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
@@ -120,7 +116,6 @@ public class BookListFragment extends AbstractCustomFragment {
             }
 
             bookAdapter.notifyDataSetChanged();
-            updateUI();
         }
 
         @Override
@@ -145,7 +140,6 @@ public class BookListFragment extends AbstractCustomFragment {
             }
 
             categoryAdapter.notifyDataSetChanged();
-            updateUI();
         }
 
         @Override
@@ -153,13 +147,6 @@ public class BookListFragment extends AbstractCustomFragment {
 
         }
     };
-
-    private void updateUI() {
-    }
-
-    @Override
-    public void finish() {
-    }
 
     @Override
     void addControllers(View view) {

@@ -1,6 +1,5 @@
 package com.example.librarymanager.fragments;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -8,7 +7,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +22,6 @@ import com.example.librarymanager.databases.BookDatabase;
 import com.example.librarymanager.databases.DataStorage;
 import com.example.librarymanager.models.BookModel;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
@@ -37,9 +34,6 @@ public class AddBookFragment extends AbstractCustomFragment {
 
     private Button btnAdd, btnCancel;
 
-    private AbstractCustomFragment fragment;
-    private FragmentTransaction fragmentTransaction;
-
     private Bitmap selectedBitMap;
 
     @Nullable
@@ -47,8 +41,7 @@ public class AddBookFragment extends AbstractCustomFragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        final View view;
-        view = inflater.inflate(R.layout.add_book_layout,
+        final View view = inflater.inflate(R.layout.add_book_layout,
                 container,
                 false);
 
@@ -65,24 +58,6 @@ public class AddBookFragment extends AbstractCustomFragment {
                 DataStorage.getCategoryListName());
 
         spnCategory.setAdapter(spinnerAdapter);
-    }
-
-    @Override
-    public void finish() {
-        if (getFragmentManager().findFragmentByTag("book_list_fragment") == null) {
-            fragment = new BookListFragment();
-        }
-        else {
-            fragment = (AbstractCustomFragment)getFragmentManager().findFragmentByTag("book_list_fragment");
-        }
-
-        fragmentTransaction = getFragmentManager().beginTransaction();
-
-        fragmentTransaction.replace(R.id.main_fragment, fragment, "book_list_fragment");
-
-        fragmentTransaction.addToBackStack(null);
-
-        fragmentTransaction.commit();
     }
 
     @Override
@@ -115,6 +90,7 @@ public class AddBookFragment extends AbstractCustomFragment {
             @Override
             public void onClick(View v) {
                 addBook();
+                finish();
             }
         });
 
@@ -139,30 +115,11 @@ public class AddBookFragment extends AbstractCustomFragment {
         book.setName(edtBookName.getText().toString());
         book.setAuthor(edtBookAuthor.getText().toString());
         book.setCategory(DataStorage.categoryList.get((int)spnCategory.getSelectedItemId()).getId());
-
-        // Convert image into string
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        selectedBitMap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        String imgEncoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        book.setImage(imgEncoded);
+        book.setImage(convertBitmapToString(selectedBitMap));
 
         // Add book to database
         BookDatabase bookDatabase = new BookDatabase();
         bookDatabase.writeNew(book);
-
-        finish();
-    }
-
-    private void capturePicture() {
-        Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(captureImage, 100);
-    }
-
-    private void choosePicture() {
-        Intent pickImage = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickImage, 200);
     }
 
     @Override

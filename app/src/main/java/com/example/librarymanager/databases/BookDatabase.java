@@ -1,5 +1,6 @@
 package com.example.librarymanager.databases;
 
+import android.app.ProgressDialog;
 import android.util.Log;
 
 import com.example.librarymanager.models.BookModel;
@@ -12,11 +13,9 @@ import java.util.ArrayList;
 public class BookDatabase {
     private final String NODE_NAME = "books";
     private DatabaseReference reference;
-    private ArrayList<BookModel> data;
 
     public BookDatabase() {
         reference = FirebaseDatabase.getInstance().getReference(NODE_NAME);
-//        reference.addValueEventListener(bookListener);
     }
 
     public void setValueEventListener(ValueEventListener valueEventListener) {
@@ -35,5 +34,4 @@ public class BookDatabase {
     public void delete(String id) {
 
     }
-
 }

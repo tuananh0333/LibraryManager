@@ -1,8 +1,7 @@
 package com.example.librarymanager.views;
 
-import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -19,12 +18,12 @@ import com.example.librarymanager.fragments.AddBookFragment;
 import com.example.librarymanager.fragments.BookListFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private final String TITLE = "QUẢN LÝ THƯ VIỆN";
 
     private DrawerLayout drawerLayout;
 
     private AbstractCustomFragment fragment;
     private FragmentTransaction fragmentTransaction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
+            final String TITLE = "QUẢN LÝ THƯ VIỆN";
             actionBar.setTitle(TITLE);
 
             // Add drawer
@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
         DataStorage.initData();
 
         updateUI();
-
-
     }
 
     private void addDrawerToggle(ActionBar actionBar){
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         final DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
 
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.openDrawer, R.string.closeDrawer);
+        final ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.openDrawer, R.string.closeDrawer);
         drawerLayout.addDrawerListener(drawerToggle);
 
         drawerToggle.syncState();
@@ -62,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        // TODO Thêm menu trong res
         menuInflater.inflate(R.menu.main_menu, menu);
 
         return super.onCreateOptionsMenu(menu);
@@ -71,12 +68,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.mnuAddBook) {
-            fragment = new AddBookFragment();
+            String tag = AbstractCustomFragment.ADD_BOOK;
+            if (getFragmentManager().findFragmentByTag(tag) == null) {
+                fragment = new AddBookFragment();
+            }
+            else {
+                fragment = (AbstractCustomFragment)getSupportFragmentManager().findFragmentByTag(tag);
+            }
 
-            fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.main_fragment, fragment, tag);
 
-            fragmentTransaction.replace(R.id.main_fragment, fragment);
-            fragmentTransaction.addToBackStack(null);
+            if (getFragmentManager().findFragmentByTag(tag) == null) {
+                fragmentTransaction.addToBackStack(null);
+            }
+
             fragmentTransaction.commit();
 
         } else {
@@ -92,17 +98,22 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        fragment.finish();
-    }
-
     private void updateUI() {
-        fragment = new BookListFragment();
-        fragmentTransaction = getFragmentManager().beginTransaction();
+        String tag = AbstractCustomFragment.LIST_BOOK;
+        if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
+            fragment = new BookListFragment();
+        }
+        else {
+            fragment = (AbstractCustomFragment) getSupportFragmentManager().findFragmentByTag(tag);
+        }
 
-        fragmentTransaction.replace(R.id.main_fragment, fragment, "book_list");
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_fragment, fragment, tag);
+
+        if (getFragmentManager().findFragmentByTag(tag) == null) {
+            fragmentTransaction.addToBackStack(null);
+        }
+
         fragmentTransaction.commit();
     }
 }

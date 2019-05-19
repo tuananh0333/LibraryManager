@@ -25,10 +25,8 @@ import com.example.librarymanager.databases.BookDatabase;
 import com.example.librarymanager.databases.DataStorage;
 import com.example.librarymanager.models.BookModel;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -38,9 +36,6 @@ public class EditBookFragment extends AbstractCustomFragment {
     private Button btnCancel, btnUpdate;
     private ImageButton btnCapture, btnChoose;
     private ImageView imgPicture;
-
-    private AbstractCustomFragment fragment;
-    private FragmentTransaction fragmentTransaction;
 
     private BookModel currentBook;
 
@@ -53,13 +48,8 @@ public class EditBookFragment extends AbstractCustomFragment {
         view = inflater.inflate(R.layout.add_book_layout, container, false);
 
         addControllers(view);
-
-        btnUpdate.setText(R.string.btn_update);
-
         initSpinner(view);
-
         prepareData();
-
         addEvents();
 
         return view;
@@ -72,26 +62,6 @@ public class EditBookFragment extends AbstractCustomFragment {
                 DataStorage.getCategoryListName());
 
         spnCategory.setAdapter(spinnerAdapter);
-
-
-    }
-
-    @Override
-    public void finish() {
-        if (getFragmentManager().findFragmentByTag("book_list_fragment") == null) {
-            fragment = new BookListFragment();
-        }
-        else {
-            fragment = (AbstractCustomFragment)getFragmentManager().findFragmentByTag("book_list_fragment");
-        }
-
-        fragmentTransaction = getFragmentManager().beginTransaction();
-
-        fragmentTransaction.replace(R.id.main_fragment, fragment, "book_list_fragment");
-
-        fragmentTransaction.addToBackStack(null);
-
-        fragmentTransaction.commit();
     }
 
     @Override
@@ -109,23 +79,14 @@ public class EditBookFragment extends AbstractCustomFragment {
     }
 
     void prepareData() {
+        btnUpdate.setText(R.string.btn_update);
+
         // Set up default data to view
         if (currentBook != null) {
             edtBookName.setText(currentBook.getName());
             edtBookAuthor.setText(currentBook.getAuthor());
             spnCategory.setSelection(DataStorage.getCategoryListName().indexOf(currentBook.getCategory()));
-
-            try{
-                byte [] encodeByte=Base64.decode(currentBook.getImage(),Base64.DEFAULT);
-
-                InputStream inputStream  = new ByteArrayInputStream(encodeByte);
-                selectedBitMap = BitmapFactory.decodeStream(inputStream);
-                imgPicture.setImageBitmap(selectedBitMap);
-
-            }catch(Exception e){
-                e.getMessage();
-            }
-
+            imgPicture.setImageBitmap(convertStringToBitmap(currentBook.getImage()));
         }
     }
 
@@ -138,11 +99,9 @@ public class EditBookFragment extends AbstractCustomFragment {
             }
         });
 
-
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             updateBook();
             finish();
             }
@@ -171,27 +130,11 @@ public class EditBookFragment extends AbstractCustomFragment {
         book.setCategory(DataStorage.categoryList.get((int)spnCategory.getSelectedItemId()).getId());
         book.setId(currentBook.getId());
 
-        // Convert image into string
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        selectedBitMap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        String imgEncoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        book.setImage(imgEncoded);
+        book.setImage(convertBitmapToString(selectedBitMap));
 
         // Add book to database
         BookDatabase bookDatabase = new BookDatabase();
         bookDatabase.update(book);
-    }
-
-    private void capturePicture() {
-        Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(captureImage, 100);
-    }
-
-    private void choosePicture() {
-        Intent pickImage = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickImage, 200);
     }
 
     @Override
