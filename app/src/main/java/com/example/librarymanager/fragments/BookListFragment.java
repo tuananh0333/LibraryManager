@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.librarymanager.R;
-import com.example.librarymanager.adapters.HorizontalRecycleViewAdapter;
+import com.example.librarymanager.adapters.RecycleViewAdapter;
 import com.example.librarymanager.databases.BookDatabase;
 import com.example.librarymanager.databases.CategoryDatabase;
 import com.example.librarymanager.databases.DataStorage;
@@ -25,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 public class BookListFragment extends AbstractCustomFragment {
     private RecyclerView categoryRecyclerView, bookRecyclerView;
 
-    private HorizontalRecycleViewAdapter bookAdapter, categoryAdapter;
+    private RecycleViewAdapter bookAdapter, categoryAdapter;
 
     private AbstractCustomFragment fragment;
     private FragmentTransaction fragmentTransaction;
@@ -48,16 +49,16 @@ public class BookListFragment extends AbstractCustomFragment {
     private void initCategory(Context context)
     {
         // Set up Recycle View
-        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(context);
-        horizontalLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        categoryRecyclerView.setLayoutManager(horizontalLayoutManager);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        categoryRecyclerView.setLayoutManager(layoutManager);
 
         // Set up database
         CategoryDatabase categoryDatabase = new CategoryDatabase();
         categoryDatabase.setValueEventListener(categoryListener);
 
         // Set up adapter
-        categoryAdapter = new HorizontalRecycleViewAdapter(R.layout.category_view_layout, DataStorage.categoryList);
+        categoryAdapter = new RecycleViewAdapter(R.layout.category_view_layout, DataStorage.categoryList);
         categoryAdapter.setClickListener(onCategoryClick);
         categoryRecyclerView.setAdapter(categoryAdapter);
     }
@@ -74,7 +75,7 @@ public class BookListFragment extends AbstractCustomFragment {
         bookDatabase.setValueEventListener(bookListener);
 
         // Set up adapter
-        bookAdapter = new HorizontalRecycleViewAdapter(R.layout.book_view_layout, DataStorage.bookList);
+        bookAdapter = new RecycleViewAdapter(R.layout.book_view_layout, DataStorage.bookList);
         bookAdapter.setClickListener(onBookClick);
         bookRecyclerView.setAdapter(bookAdapter);
     }

@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class HorizontalRecycleViewAdapter extends RecyclerView.Adapter<AbstractCustomViewHolder> {
+public class RecycleViewAdapter extends RecyclerView.Adapter<AbstractCustomViewHolder> {
     private int layoutId;
     private ArrayList dataSource;
 
@@ -26,7 +26,7 @@ public class HorizontalRecycleViewAdapter extends RecyclerView.Adapter<AbstractC
         this.clickListener = clickListener;
     }
 
-    public HorizontalRecycleViewAdapter(int layoutId, ArrayList dataSource) {
+    public RecycleViewAdapter(int layoutId, ArrayList dataSource) {
         this.layoutId = layoutId;
         this.dataSource = dataSource;
     }

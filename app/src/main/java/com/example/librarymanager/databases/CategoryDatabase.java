@@ -46,7 +46,7 @@ public class CategoryDatabase {
 //            }
 //            // Set up adapter
 //            // categoryAdapter = new H(this, R.layout.category_view_layout, new ArrayList<CategoryModel>());
-//            categoryAdapter = new HorizontalRecycleViewAdapter(new int[] {R.layout.book_view_layout, R.layout.category_view_layout}, categoryData);
+//            categoryAdapter = new RecycleViewAdapter(new int[] {R.layout.book_view_layout, R.layout.category_view_layout}, categoryData);
 //            categoryAdapter.setClickListener(onCategoryCLick);
 //
 //            // Set up custom list
