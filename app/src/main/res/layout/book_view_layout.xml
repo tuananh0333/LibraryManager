@@ -11,22 +11,39 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/imgBook"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/img_description_logo"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_launcher"/>
 
-        <TextView
-            android:id="@+id/txtBookName"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="71dp"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/txtBookName"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:text="@string/app_name"/>
+            <TextView
+                android:id="@+id/lblStatus"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/active"
+                android:text="@string/status_available"
+                android:gravity="center"/>
+        </LinearLayout>
+
 
     </LinearLayout>
 

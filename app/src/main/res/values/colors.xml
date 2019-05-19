@@ -10,4 +10,6 @@
     <color name="sideNavBarCenter">#009688</color>
     <color name="sideNavBarEnd">#00695C</color>
     <color name="sideNavBarStart">#4DB6AC</color>
+
+    <color name="active">#F48024</color>
 </resources>

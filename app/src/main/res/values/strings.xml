@@ -18,6 +18,8 @@
 
     <!--LABEL-->
     <string name="lbl_copyright">Made by Le Tuan Anh and Nguyen Phan Huy</string>
+    <string name="status_available">Có sẵn</string>
+    <string name="status_unavaiable">Đã mượn</string>
 
     <!--TITLE-->
     <string name="title_add_book">Thêm sách mới</string>
