@@ -4,7 +4,7 @@ import android.view.View;
 
 public class CategoryCustomFragment extends AbstractCustomFragment {
     @Override
-    void finish() {
+    public void finish() {
 
     }
 

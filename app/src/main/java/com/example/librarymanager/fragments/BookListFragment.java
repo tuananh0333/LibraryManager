@@ -94,13 +94,12 @@ public class BookListFragment extends AbstractCustomFragment {
         public void onClick(View v) {
             BookModel book = DataStorage.bookList.get(bookRecyclerView.getChildAdapterPosition(v));
 
-            // TODO User click vào category -> load lại adapter
             fragment = new EditBookFragment();
 
             ((EditBookFragment) fragment).getData(book);
             fragmentTransaction = getFragmentManager().beginTransaction();
 
-            fragmentTransaction.replace(R.id.main_fragment, fragment, "book_list");
+            fragmentTransaction.replace(R.id.main_fragment, fragment, "book_edit");
             fragmentTransaction.commit();
         }
     };
@@ -157,8 +156,7 @@ public class BookListFragment extends AbstractCustomFragment {
     }
 
     @Override
-    void finish() {
-
+    public void finish() {
     }
 
     @Override

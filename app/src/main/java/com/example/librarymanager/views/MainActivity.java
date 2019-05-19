@@ -2,6 +2,7 @@ package com.example.librarymanager.views;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -16,7 +17,6 @@ import com.example.librarymanager.databases.DataStorage;
 import com.example.librarymanager.fragments.AbstractCustomFragment;
 import com.example.librarymanager.fragments.AddBookFragment;
 import com.example.librarymanager.fragments.BookListFragment;
-import com.example.librarymanager.fragments.EditBookFragment;
 
 public class MainActivity extends AppCompatActivity {
     private final String TITLE = "QUẢN LÝ THƯ VIỆN";
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction = getFragmentManager().beginTransaction();
 
             fragmentTransaction.replace(R.id.main_fragment, fragment);
-
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
 
         } else {
@@ -92,11 +92,17 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        fragment.finish();
+    }
+
     private void updateUI() {
         fragment = new BookListFragment();
         fragmentTransaction = getFragmentManager().beginTransaction();
 
         fragmentTransaction.replace(R.id.main_fragment, fragment, "book_list");
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 }

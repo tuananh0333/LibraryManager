@@ -10,7 +10,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,11 +77,20 @@ public class EditBookFragment extends AbstractCustomFragment {
     }
 
     @Override
-    void finish() {
-        fragment = new BookListFragment();
+    public void finish() {
+        if (getFragmentManager().findFragmentByTag("book_list_fragment") == null) {
+            fragment = new BookListFragment();
+        }
+        else {
+            fragment = (AbstractCustomFragment)getFragmentManager().findFragmentByTag("book_list_fragment");
+        }
+
         fragmentTransaction = getFragmentManager().beginTransaction();
 
-        fragmentTransaction.replace(R.id.main_fragment, fragment);
+        fragmentTransaction.replace(R.id.main_fragment, fragment, "book_list_fragment");
+
+        fragmentTransaction.addToBackStack(null);
+
         fragmentTransaction.commit();
     }
 

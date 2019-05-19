@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class AddCategoryFragment extends AbstractCustomFragment {
     @Override
-    void finish() {
+    public void finish() {
 
     }
 

@@ -68,11 +68,20 @@ public class AddBookFragment extends AbstractCustomFragment {
     }
 
     @Override
-    void finish() {
-        fragment = new BookListFragment();
+    public void finish() {
+        if (getFragmentManager().findFragmentByTag("book_list_fragment") == null) {
+            fragment = new BookListFragment();
+        }
+        else {
+            fragment = (AbstractCustomFragment)getFragmentManager().findFragmentByTag("book_list_fragment");
+        }
+
         fragmentTransaction = getFragmentManager().beginTransaction();
 
-        fragmentTransaction.replace(R.id.main_fragment, fragment);
+        fragmentTransaction.replace(R.id.main_fragment, fragment, "book_list_fragment");
+
+        fragmentTransaction.addToBackStack(null);
+
         fragmentTransaction.commit();
     }
 
