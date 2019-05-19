@@ -11,15 +11,6 @@ public class BookModel {
 
     public BookModel() { }
 
-    public BookModel(String name, String author, String type, String image) {
-        this.name = name;
-        this.author = author;
-        this.category = type;
-//        this.borrowDate = null;
-//        this.borrower = "";
-        this.image = image;
-    }
-
     public String getId() {
         return id;
     }

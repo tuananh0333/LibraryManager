@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,8 +19,8 @@ import com.example.librarymanager.fragments.AddBookFragment;
 import com.example.librarymanager.fragments.BookListFragment;
 
 public class MainActivity extends AppCompatActivity {
-
     private DrawerLayout drawerLayout;
+    private RecyclerView tableList;
 
     private AbstractCustomFragment fragment;
     private FragmentTransaction fragmentTransaction;
@@ -38,11 +39,16 @@ public class MainActivity extends AppCompatActivity {
             addDrawerToggle(actionBar);
         }
 
-        drawerLayout = findViewById(R.id.drawer_layout);
+        addControl();
 
         DataStorage.initData();
 
         updateUI();
+    }
+
+    private void addControl() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        tableList = findViewById(R.id.table_list);
     }
 
     private void addDrawerToggle(ActionBar actionBar){

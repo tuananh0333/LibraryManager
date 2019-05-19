@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,8 @@ public class BookListFragment extends AbstractCustomFragment {
 
     private RecycleViewAdapter bookAdapter, categoryAdapter;
 
-    private int currentCategoryId;
+    private CategoryDatabase categoryDatabase;
+    private BookDatabase bookDatabase;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,7 +37,6 @@ public class BookListFragment extends AbstractCustomFragment {
 
         addControllers(view);
 
-        initBook(getActivity());
         initCategory(getActivity());
 
         return view;
@@ -49,7 +50,7 @@ public class BookListFragment extends AbstractCustomFragment {
         categoryRecyclerView.setLayoutManager(layoutManager);
 
         // Set up database
-        CategoryDatabase categoryDatabase = new CategoryDatabase();
+        categoryDatabase = new CategoryDatabase();
         categoryDatabase.setValueEventListener(categoryListener);
 
         // Set up adapter
@@ -58,15 +59,14 @@ public class BookListFragment extends AbstractCustomFragment {
         categoryRecyclerView.setAdapter(categoryAdapter);
     }
 
-    private void initBook(Context context)
+    private void initBook(Context context, int categoryId)
     {
         // Setup Recycle View
         LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(context);
         verticalLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         bookRecyclerView.setLayoutManager(verticalLayoutManager);
 
-        // Set up database
-        BookDatabase bookDatabase = new BookDatabase();
+        bookDatabase = new BookDatabase(DataStorage.categoryList.get(categoryId).getId());
         bookDatabase.setValueEventListener(bookListener);
 
         // Set up adapter
@@ -78,27 +78,28 @@ public class BookListFragment extends AbstractCustomFragment {
     View.OnClickListener onCategoryClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            currentCategoryId = categoryRecyclerView.getChildAdapterPosition(v);
+            int categoryId = categoryRecyclerView.getChildAdapterPosition(v);
 
+            initBook(getActivity(), categoryId);
             // TODO User click vào category -> load lại adapter
 //            fragment.updateUserInteraction(questionID);
         }
     };
 
     View.OnClickListener onBookClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            BookModel book = DataStorage.bookList.get(bookRecyclerView.getChildAdapterPosition(v));
+            @Override
+            public void onClick(View v) {
+        BookModel book = DataStorage.bookList.get(bookRecyclerView.getChildAdapterPosition(v));
 
-            fragment = new EditBookFragment();
+        fragment = new EditBookFragment();
 
-            ((EditBookFragment) fragment).getData(book);
-            fragmentTransaction = getFragmentManager().beginTransaction();
+        ((EditBookFragment) fragment).getData(book);
+        fragmentTransaction = getFragmentManager().beginTransaction();
 
-            fragmentTransaction.replace(R.id.main_fragment, fragment, "book_edit");
+        fragmentTransaction.replace(R.id.main_fragment, fragment, AbstractCustomFragment.EDIT_BOOK);
 
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
         }
     };
 
@@ -131,15 +132,17 @@ public class BookListFragment extends AbstractCustomFragment {
 
             for (DataSnapshot data : dataSnapshot.getChildren()) {
                 if (data.getValue() != null) {
-                    String id = data.getKey();
-                    String name = data.getValue().toString();
-
-                    CategoryModel category = new CategoryModel(id, name);
+                    CategoryModel category = data.getValue(CategoryModel.class);
+                    category.setId(data.getKey());
                     DataStorage.categoryList.add(category);
                 }
             }
 
             categoryAdapter.notifyDataSetChanged();
+
+            if (DataStorage.categoryList.size() != 0) {
+                initBook(getContext(), 0);
+            }
         }
 
         @Override

@@ -4,10 +4,7 @@ public class CategoryModel {
     private String id;
     private String name;
 
-    public CategoryModel(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    public CategoryModel() {}
 
     public String getId() {
         return id;
