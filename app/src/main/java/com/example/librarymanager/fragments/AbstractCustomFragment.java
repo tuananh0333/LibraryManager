@@ -76,5 +76,5 @@ public abstract class AbstractCustomFragment extends Fragment {
         }
     }
 
-    abstract void updateData();
+    public abstract void notifyDataLoaded();
 }

@@ -22,6 +22,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class BookListFragment extends AbstractCustomFragment {
     private RecyclerView categoryRecyclerView, bookRecyclerView;
     private ProgressBar progressBar;
@@ -29,6 +31,8 @@ public class BookListFragment extends AbstractCustomFragment {
     private RecycleViewAdapter bookAdapter, categoryAdapter;
 
     private BookDatabase bookDatabase;
+
+    private boolean isLoaded = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,6 +44,7 @@ public class BookListFragment extends AbstractCustomFragment {
         initCategory(getActivity());
 
         initBook(getContext(), 0);
+
         return view;
     }
 
@@ -59,13 +64,22 @@ public class BookListFragment extends AbstractCustomFragment {
         categoryRecyclerView.setLayoutManager(layoutManager);
 
         // Set up adapter
-        categoryAdapter = new RecycleViewAdapter(R.layout.category_view_layout, DataStorage.categoryList);
+        if (isLoaded) {
+            categoryAdapter = new RecycleViewAdapter(R.layout.category_view_layout, DataStorage.categoryList);
+        }
+        else {
+            categoryAdapter = new RecycleViewAdapter(R.layout.category_view_layout, new ArrayList());
+        }
         categoryAdapter.setClickListener(onCategoryClick);
         categoryRecyclerView.setAdapter(categoryAdapter);
     }
 
     private void initBook(Context context, int categoryId)
     {
+        if (bookAdapter != null) {
+            // TODO clear list and prepare for new data
+        }
+
         // Setup Recycle View
         GridLayoutManager verticalLayoutManager = new GridLayoutManager(context, 2);
         verticalLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -136,13 +150,7 @@ public class BookListFragment extends AbstractCustomFragment {
     };
 
     @Override
-    void updateData() {
-        categoryAdapter.notifyDataSetChanged();
-
-        Log.d("abc", (DataStorage.categoryList.size() + ""));
-
-        if (DataStorage.categoryList.size() != 0) {
-            initBook(getContext(), 0);
-        }
+    public void notifyDataLoaded() {
+        isLoaded = true;
     }
 }

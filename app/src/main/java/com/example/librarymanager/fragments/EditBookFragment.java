@@ -157,20 +157,20 @@ public class EditBookFragment extends AbstractCustomFragment {
             edtBookAuthor.requestFocus();
             return false;
         }
-
-        String pattern = getString(R.string.name_pattern);
-
-        if (!Pattern.matches(pattern, bookName)) {
-            edtBookName.setError("Tên sách chỉ từ 3 - 16 kí tự chữ và số");
-            edtBookName.requestFocus();
-            return false;
-        }
-
-        if (!Pattern.matches(pattern, bookAuthor)) {
-            edtBookAuthor.setError("Tên tác giả chỉ từ 3 - 16 kí tự chữ và số");
-            edtBookAuthor.requestFocus();
-            return false;
-        }
+//
+//        String pattern = getString(R.string.name_pattern);
+//
+//        if (!Pattern.matches(pattern, bookName)) {
+//            edtBookName.setError("Tên sách chỉ từ 3 - 16 kí tự chữ và số");
+//            edtBookName.requestFocus();
+//            return false;
+//        }
+//
+//        if (!Pattern.matches(pattern, bookAuthor)) {
+//            edtBookAuthor.setError("Tên tác giả chỉ từ 3 - 16 kí tự chữ và số");
+//            edtBookAuthor.requestFocus();
+//            return false;
+//        }
 
         return true;
     }
@@ -196,7 +196,7 @@ public class EditBookFragment extends AbstractCustomFragment {
     }
 
     @Override
-    void updateData() {
+    public void notifyDataLoaded() {
 
     }
 }

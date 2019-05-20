@@ -2,7 +2,6 @@ package com.example.librarymanager.views;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,7 +9,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -87,7 +85,10 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
-                showListBook();
+
+                if (DataStorage.categoryList.size() > 0) {
+                    showListBook();
+                }
             }
 
             @Override
@@ -146,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
         else {
             fragment = (AbstractCustomFragment) getSupportFragmentManager().findFragmentByTag(tag);
         }
+
+        fragment.notifyDataLoaded();
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment, fragment, tag);

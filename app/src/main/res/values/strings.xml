@@ -23,6 +23,9 @@
     <string name="status_available">Có sẵn</string>
     <string name="status_unavaiable">Đã mượn</string>
     <string name="upload_image">Chọn hình ảnh</string>
+    <string name="openDrawer">Mở drawer</string>
+    <string name="closeDrawer">Đóng drawer</string>
+    <string name="book_hint">Tên sách không bao gồm kí tự đặc biệt và không quá 250 kí tự</string>
 
     <!--TITLE-->
     <string name="title_add_book">Thêm sách mới</string>
@@ -36,8 +39,6 @@
     <string name="writtenBy">Written by Nguyen Phan Huy</string>
     <string name="email">17211tt3242@mail.tdc.edu.vn</string>
 
-    <string name="openDrawer">Mở drawer</string>
-    <string name="closeDrawer">Đóng drawer</string>
-    <string name="book_hint">Tên sách không bao gồm kí tự đặc biệt và không quá 250 kí tự</string>
-    <string name="name_pattern">[a-z0-9_-]{3,16}</string>
+    <!--REGEX-->
+    <string name="name_pattern">[\p{L}]{3,16}</string>
 </resources>
