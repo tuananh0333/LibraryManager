@@ -99,6 +99,14 @@
             android:background="@color/colorAccent"
             android:textColor="@color/white" />
 
+        <Button
+            style="@style/Widget.AppCompat.Button"
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_delete"
+            android:textColor="@color/design_default_color_primary_dark" />
+
     </LinearLayout>
 
 

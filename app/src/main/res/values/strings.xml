@@ -10,6 +10,7 @@
     <string name="btn_add">Thêm</string>
     <string name="btn_cancel">Hủy</string>
     <string name="btn_update">Cập nhật</string>
+    <string name="btn_delete">Xoá</string>
 
     <!--IMAGE DESCRIPTION-->
     <string name="img_description_logo">Logo</string>
@@ -21,7 +22,7 @@
     <!--LABEL-->
     <string name="lbl_copyright">Made by Le Tuan Anh and Nguyen Phan Huy</string>
     <string name="status_available">Có sẵn</string>
-    <string name="status_unavaiable">Đã mượn</string>
+    <string name="status_unavaiable">Đã mượn</string>Xoa
     <string name="upload_image">Chọn hình ảnh</string>
     <string name="openDrawer">Mở drawer</string>
     <string name="closeDrawer">Đóng drawer</string>

@@ -40,7 +40,7 @@ public class AddBookFragment extends AbstractCustomFragment{
     private ImageButton btnCapture, btnChoose;
     private ImageView imgPicture;
 
-    private Button btnAdd, btnCancel;
+    private Button btnAdd, btnCancel, btnDelete;
 
     private Bitmap selectedBitMap;
 
@@ -77,6 +77,8 @@ public class AddBookFragment extends AbstractCustomFragment{
 
         btnAdd = view.findViewById(R.id.btnAdd);
         btnCancel = view.findViewById(R.id.btnCancel);
+        btnDelete = view.findViewById(R.id.btnDelete);
+        btnDelete.setVisibility(View.GONE);
 
         btnCapture = view.findViewById(R.id.btnCapture);
         btnChoose = view.findViewById(R.id.btnChoose);
