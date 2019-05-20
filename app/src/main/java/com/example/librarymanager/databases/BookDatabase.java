@@ -1,26 +1,29 @@
 package com.example.librarymanager.databases;
 
-import android.util.Log;
-
 import com.example.librarymanager.models.BookModel;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 public class BookDatabase {
     private final String NODE_NAME = "books";
     private DatabaseReference reference;
-    private ArrayList<BookModel> data;
+    private Query query;
 
     public BookDatabase() {
         reference = FirebaseDatabase.getInstance().getReference(NODE_NAME);
-//        reference.addValueEventListener(bookListener);
+    }
+
+    public BookDatabase(int categoryId) {
+        String categoryName = DataStorage.categoryList.get(categoryId).getId();
+
+        reference = FirebaseDatabase.getInstance().getReference(NODE_NAME);
+        query = reference.orderByChild("category").equalTo(categoryName);
     }
 
     public void setValueEventListener(ValueEventListener valueEventListener) {
-        reference.addValueEventListener(valueEventListener);
+        query.addValueEventListener(valueEventListener);
     }
 
     public void writeNew(BookModel book) {
@@ -35,5 +38,4 @@ public class BookDatabase {
     public void delete(String id) {
 
     }
-
 }

@@ -2,7 +2,6 @@ package com.example.librarymanager.ViewHolders;
 
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.librarymanager.R;

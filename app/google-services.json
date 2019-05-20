@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "863063920737",
-    "firebase_url": "https://libmanager-cd227.firebaseio.com",
-    "project_id": "libmanager-cd227",
-    "storage_bucket": "libmanager-cd227.appspot.com"
+    "project_number": "677462017338",
+    "firebase_url": "https://libmanager-f0bb7.firebaseio.com",
+    "project_id": "libmanager-f0bb7",
+    "storage_bucket": "libmanager-f0bb7.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:863063920737:android:2dd61e4fd24d9212",
+        "mobilesdk_app_id": "1:677462017338:android:2dd61e4fd24d9212",
         "android_client_info": {
           "package_name": "com.example.librarymanager"
         }
       },
       "oauth_client": [
         {
-          "client_id": "863063920737-krf3re1qemspunc2upa34ep2ri5uck1u.apps.googleusercontent.com",
+          "client_id": "677462017338-pa2or9sdsno0vk2o3sbquvk7mrnf9fu4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.librarymanager",
@@ -23,20 +23,20 @@
           }
         },
         {
-          "client_id": "863063920737-a5iqk3oqmus94p6b85pjugotaehpjhfj.apps.googleusercontent.com",
+          "client_id": "677462017338-nnao5v27e57m91k4nvkrqc1nlffm9077.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBojpfxW4XQgVqIhzLMcxxB4EOhvnWeuaE"
+          "current_key": "AIzaSyA7pGfLtNGOx-qETtzrLw-OfeqZQTRCxrw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "863063920737-a5iqk3oqmus94p6b85pjugotaehpjhfj.apps.googleusercontent.com",
+              "client_id": "677462017338-nnao5v27e57m91k4nvkrqc1nlffm9077.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

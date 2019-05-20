@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
-    private final String TITLE = "Đăng nhập";
 
     private Button btnLogin;
     private EditText edtUsername, edtPassword;
@@ -33,29 +32,42 @@ public class LoginActivity extends AppCompatActivity {
         // Change action bar title
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
+            String TITLE = "Đăng nhập";
             actionBar.setTitle(TITLE);
         }
 
         mAuth = FirebaseAuth.getInstance();
 
+        addControllers();
+        addEvents();
+    }
+
+    private void addControllers() {
         btnLogin = findViewById(R.id.btnLogin);
         edtUsername = findViewById(R.id.edtUsername);
         edtPassword = findViewById(R.id.edtPassword);
+    }
 
-        btnLogin.setOnClickListener(onLoginClick);
+    private void addEvents() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = edtUsername.getText().toString().trim();
+                final String password = edtPassword.getText().toString().trim();
+
+                if (!username.equals("") && !password.equals("")) {
+                    final String email = username + "@libmanager.tdc.edu.vn";
+                    Log.w("email: ", email);
+                    login(email, password);
+                }
+            }
+        });
     }
 
     private View.OnClickListener onLoginClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String username = edtUsername.getText().toString().trim();
-            final String password = edtPassword.getText().toString().trim();
 
-            if (!username.equals("") && !password.equals("")) {
-                final String email = username + "@libmanager.tdc.edu.vn";
-                Log.w("email: ", email);
-                login(email, password);
-            }
         }
     };
 
@@ -73,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (user != null) {
                             updateUI(user);
 
-                            // TODO Láy thông tin người dùng
+                            // TODO Lấy thông tin người dùng
 
                             // The user's ID, unique to the Firebase project. Do NOT use this value to
                             // authenticate with your backend server, if you have one. Use

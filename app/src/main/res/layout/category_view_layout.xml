@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     android:layout_margin="@dimen/layout_margin"
     app:cardCornerRadius="@dimen/card_corner_radius"
-    app:cardElevation="@dimen/card_elevation"
-    >
+    app:cardElevation="@dimen/card_elevation">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +21,8 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:text="@string/app_name"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:padding="@dimen/child_padding"/>
 
     </LinearLayout>
 
