@@ -1,6 +1,8 @@
 package com.example.librarymanager.views;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -8,15 +10,21 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.librarymanager.R;
+import com.example.librarymanager.databases.CategoryDatabase;
 import com.example.librarymanager.databases.DataStorage;
 import com.example.librarymanager.fragments.AbstractCustomFragment;
 import com.example.librarymanager.fragments.AddBookFragment;
 import com.example.librarymanager.fragments.BookListFragment;
+import com.example.librarymanager.models.CategoryModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -30,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout_with_drawer);
 
+        DataStorage.initData();
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             final String TITLE = "QUẢN LÝ THƯ VIỆN";
@@ -41,14 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         addControl();
 
-        DataStorage.initData();
-
-        updateUI();
-    }
-
-    private void addControl() {
-        drawerLayout = findViewById(R.id.drawer_layout);
-        tableList = findViewById(R.id.table_list);
+        loadData();
     }
 
     private void addDrawerToggle(ActionBar actionBar){
@@ -62,6 +65,37 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.syncState();
     }
 
+
+    private void addControl() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        tableList = findViewById(R.id.table_list);
+    }
+
+    private void loadData() {
+        CategoryDatabase categoryDatabase = new CategoryDatabase();
+        categoryDatabase.addListenerForSingleValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                DataStorage.categoryList.clear();
+
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    if (data.getValue() != null) {
+                        CategoryModel category = data.getValue(CategoryModel.class);
+                        if (category != null) {
+                            category.setId(data.getKey());
+                            DataStorage.categoryList.add(category);
+                        }
+                    }
+                }
+                showListBook();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -104,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateUI() {
+    private void showListBook() {
         String tag = AbstractCustomFragment.LIST_BOOK;
         if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
             fragment = new BookListFragment();

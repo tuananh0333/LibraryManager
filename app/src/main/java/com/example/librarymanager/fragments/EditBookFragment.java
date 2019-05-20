@@ -1,15 +1,12 @@
 package com.example.librarymanager.fragments;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +22,11 @@ import com.example.librarymanager.databases.BookDatabase;
 import com.example.librarymanager.databases.DataStorage;
 import com.example.librarymanager.models.BookModel;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import static android.app.Activity.RESULT_OK;
+import static android.text.TextUtils.isEmpty;
 
 public class EditBookFragment extends AbstractCustomFragment {
     private EditText edtBookName, edtBookAuthor;
@@ -64,8 +62,7 @@ public class EditBookFragment extends AbstractCustomFragment {
         spnCategory.setAdapter(spinnerAdapter);
     }
 
-    @Override
-    void addControllers(View view) {
+    private void addControllers(View view) {
         edtBookName = view.findViewById(R.id.edtBookName);
         edtBookAuthor = view.findViewById(R.id.edtAuthor);
         spnCategory = view.findViewById(R.id.spnBookCategory);
@@ -78,7 +75,7 @@ public class EditBookFragment extends AbstractCustomFragment {
         imgPicture = view.findViewById(R.id.imgPicture);
     }
 
-    void prepareData() {
+    private void prepareData() {
         btnUpdate.setText(R.string.btn_update);
 
         // Set up default data to view
@@ -90,8 +87,7 @@ public class EditBookFragment extends AbstractCustomFragment {
         }
     }
 
-    @Override
-    void addEvents() {
+    private void addEvents() {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +99,6 @@ public class EditBookFragment extends AbstractCustomFragment {
             @Override
             public void onClick(View v) {
             updateBook();
-            finish();
             }
         });
 
@@ -123,6 +118,10 @@ public class EditBookFragment extends AbstractCustomFragment {
     }
 
     private void updateBook () {
+        if (!validate()) {
+            return;
+        }
+
         // Prepare data
         BookModel book = new BookModel();
         book.setName(edtBookName.getText().toString());
@@ -135,6 +134,45 @@ public class EditBookFragment extends AbstractCustomFragment {
         // Add book to database
         BookDatabase bookDatabase = new BookDatabase();
         bookDatabase.update(book);
+
+        finish();
+    }
+
+    private boolean validate() {
+        if (edtBookName == null || edtBookAuthor == null) {
+            return false;
+        }
+
+        String bookName = edtBookName.getText().toString().trim();
+        String bookAuthor = edtBookAuthor.getText().toString().trim();
+
+        if (isEmpty(bookName)) {
+            edtBookName.setError("Vui lòng nhập tên sách");
+            edtBookName.requestFocus();
+            return false;
+        }
+
+        if (isEmpty(bookAuthor)) {
+            edtBookAuthor.setError("Vui lòng nhập tên tác giả");
+            edtBookAuthor.requestFocus();
+            return false;
+        }
+
+        String pattern = getString(R.string.name_pattern);
+
+        if (!Pattern.matches(pattern, bookName)) {
+            edtBookName.setError("Tên sách chỉ từ 3 - 16 kí tự chữ và số");
+            edtBookName.requestFocus();
+            return false;
+        }
+
+        if (!Pattern.matches(pattern, bookAuthor)) {
+            edtBookAuthor.setError("Tên tác giả chỉ từ 3 - 16 kí tự chữ và số");
+            edtBookAuthor.requestFocus();
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -155,5 +193,10 @@ public class EditBookFragment extends AbstractCustomFragment {
 
     public void getData(BookModel book) {
         currentBook = book;
+    }
+
+    @Override
+    void updateData() {
+
     }
 }

@@ -33,7 +33,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<AbstractCustomViewH
 
     @NonNull
     @Override
-    public AbstractCustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AbstractCustomViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         CardView cardView = (CardView) inflater.inflate(viewType, parent, false);

@@ -15,8 +15,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 public class BookViewHolderAbstract extends AbstractCustomViewHolder {
-    private ImageView bookImage;
-    private TextView bookName;
+    private final ImageView bookImage;
+    private final TextView bookName;
     private TextView bookAuthor;
 
     public BookViewHolderAbstract(@NonNull View itemView) {
@@ -24,7 +24,7 @@ public class BookViewHolderAbstract extends AbstractCustomViewHolder {
 
         bookImage = itemView.findViewById(R.id.imgBook);
         bookName = itemView.findViewById(R.id.txtBookName);
-        //TODO find book state textview from itemView
+        //TODO find book state textView from itemView
     }
 
     @Override
@@ -32,16 +32,16 @@ public class BookViewHolderAbstract extends AbstractCustomViewHolder {
         BookModel book = (BookModel) data;
 
         if (bookImage != null) {
-//            try{
-//                byte [] encodeByte= Base64.decode(book.getImage(),Base64.DEFAULT);
-//
-//                InputStream inputStream  = new ByteArrayInputStream(encodeByte);
-//                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-//                bookImage.setImageBitmap(bitmap);
-//
-//            }catch(Exception e){
-//                e.getMessage();
-//            }
+            try{
+                byte [] encodeByte= Base64.decode(book.getImage(),Base64.DEFAULT);
+
+                InputStream inputStream  = new ByteArrayInputStream(encodeByte);
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                bookImage.setImageBitmap(bitmap);
+
+            } catch (NullPointerException e){
+                e.getMessage();
+            }
         }
         if (bookName != null) {
             this.bookName.setText(book.getName());

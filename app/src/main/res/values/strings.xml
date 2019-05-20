@@ -3,23 +3,26 @@
 
     <!--EDIT TEXT-->
     <string name="edt_id_hint">Mã đăng nhập</string>
-    <string name="edt_search_param_hint">Tên sách, tác giả, &#8230;</string>
     <string name="edt_password_hint">Mật khẩu</string>
 
     <!--BUTTON-->
     <string name="btn_login">Đăng nhập</string>
-    <string name="btn_search">Tìm kiếm</string>
     <string name="btn_add">Thêm</string>
     <string name="btn_cancel">Hủy</string>
     <string name="btn_update">Cập nhật</string>
 
     <!--IMAGE DESCRIPTION-->
     <string name="img_description_logo">Logo</string>
+    <string name="choose_image_from_storage">Từ bộ nhớ</string>
+    <string name="take_image_using_camera">Chụp từ camera</string>
+    <string name="selected_image">Hình ảnh đã chọn</string>
+
 
     <!--LABEL-->
     <string name="lbl_copyright">Made by Le Tuan Anh and Nguyen Phan Huy</string>
     <string name="status_available">Có sẵn</string>
     <string name="status_unavaiable">Đã mượn</string>
+    <string name="upload_image">Chọn hình ảnh</string>
 
     <!--TITLE-->
     <string name="title_add_book">Thêm sách mới</string>
@@ -36,4 +39,5 @@
     <string name="openDrawer">Mở drawer</string>
     <string name="closeDrawer">Đóng drawer</string>
     <string name="book_hint">Tên sách không bao gồm kí tự đặc biệt và không quá 250 kí tự</string>
+    <string name="name_pattern">[a-z0-9_-]{3,16}</string>
 </resources>
