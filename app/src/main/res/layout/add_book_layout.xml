@@ -13,35 +13,48 @@
         android:layout_weight="5"
         android:orientation="vertical">
 
+        <TextView
+            android:labelFor="@id/edtBookName"
+            android:id="@+id/lblBookName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_book_name"/>
+
         <EditText
-            android:hint="@string/txt_book_name"
+            android:hint="@string/lbl_book_name"
             android:id="@+id/edtBookName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textFilter" />
 
         <TextView
-            android:layout_marginTop="20dp"
             android:labelFor="@id/spnBookCategory"
-            android:id="@+id/edtBookCategory"
+            android:id="@+id/lblBookCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/txt_category"/>
+            android:text="@string/lbl_category"/>
 
         <Spinner
             android:id="@+id/spnBookCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <TextView
+            android:labelFor="@id/edtAuthor"
+            android:id="@+id/lblAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_author"/>
+
         <EditText
-            android:hint="@string/txt_author"
+            android:hint="@string/lbl_author"
             android:id="@+id/edtAuthor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/lblBookImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/upload_image"
@@ -56,7 +69,12 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/btnCapture"
-                android:src="@drawable/ic_launcher_foreground" />
+                android:src="@android:drawable/stat_notify_sdcard"
+                android:background="@color/colorAccent"/>
+
+            <Space
+                android:layout_width="@dimen/child_padding"
+                android:layout_height="match_parent" />
 
             <ImageButton
                 android:contentDescription="@string/take_image_using_camera"
@@ -64,15 +82,19 @@
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@android:drawable/ic_menu_camera"
+                android:background="@color/colorPrimary"/>
         </LinearLayout>
 
         <ImageView
             android:contentDescription="@string/selected_image"
             android:id="@+id/imgPicture"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
             app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -97,7 +119,7 @@
             android:layout_height="wrap_content"
             android:text="@string/btn_add"
             android:background="@color/colorAccent"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"/>
 
         <Button
             style="@style/Widget.AppCompat.Button"
@@ -105,7 +127,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_delete"
-            android:textColor="@color/design_default_color_primary_dark" />
+            android:textColor="@color/design_default_color_primary_dark"/>
 
     </LinearLayout>
 

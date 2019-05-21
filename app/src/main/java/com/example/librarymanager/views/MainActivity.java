@@ -2,33 +2,24 @@ package com.example.librarymanager.views;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.example.librarymanager.R;
-import com.example.librarymanager.databases.CategoryDatabase;
-import com.example.librarymanager.databases.DataStorage;
 import com.example.librarymanager.fragments.AbstractCustomFragment;
 import com.example.librarymanager.fragments.AddBookFragment;
 import com.example.librarymanager.fragments.BookListFragment;
-import com.example.librarymanager.models.CategoryModel;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     private DrawerLayout drawerLayout;
-    private RecyclerView tableList;
-    private Button btnAdd;
+    private NavigationView navigationView;
 
     private AbstractCustomFragment fragment;
     private FragmentTransaction fragmentTransaction;
@@ -37,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout_with_drawer);
-
-        DataStorage.initData();
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -49,9 +38,10 @@ public class MainActivity extends AppCompatActivity {
             addDrawerToggle(actionBar);
         }
 
-        addControl();
+        addControls();
+        addEvents();
 
-        loadData();
+        showListBook();
     }
 
     private void addDrawerToggle(ActionBar actionBar){
@@ -65,82 +55,50 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.syncState();
     }
 
-
-    private void addControl() {
+    private void addControls() {
         drawerLayout = findViewById(R.id.drawer_layout);
-        tableList = findViewById(R.id.table_list);
-        btnAdd = findViewById(R.id.btnPrepareAddBook);
+        navigationView = findViewById(R.id.nav_view);
     }
 
-    private void loadData() {
-        CategoryDatabase categoryDatabase = new CategoryDatabase();
-        categoryDatabase.addListenerForSingleValueEventListener(new ValueEventListener() {
+    private void addEvents() {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                DataStorage.categoryList.clear();
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                menuItem.setChecked(true);
+                drawerLayout.closeDrawers();
 
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    if (data.getValue() != null) {
-                        CategoryModel category = data.getValue(CategoryModel.class);
-                        if (category != null) {
-                            category.setId(data.getKey());
-                            DataStorage.categoryList.add(category);
-                        }
-                    }
+                switch (menuItem.getItemId()) {
+                    case R.id.nav_add:
+                        prepareAddBook(menuItem.getActionView());
+                        break;
+                    case R.id.nav_borrow:
+                        break;
+                    case R.id.nav_details:
+                        break;
+                    case R.id.nav_manage:
+                        break;
                 }
-
-                if (DataStorage.categoryList.size() > 0) {
-                    showListBook();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                return true;
             }
         });
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater menuInflater = getMenuInflater();
-//        menuInflater.inflate(R.menu.main_menu, menu);
-//
-//        return super.onCreateOptionsMenu(menu);
-//    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.mnuAddBook) {
-            String tag = AbstractCustomFragment.ADD_BOOK;
-            if (getFragmentManager().findFragmentByTag(tag) == null) {
-                fragment = new AddBookFragment();
-            }
-            else {
-                fragment = (AbstractCustomFragment)getSupportFragmentManager().findFragmentByTag(tag);
-            }
-
-            fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.main_fragment, fragment, tag);
-
-            if (getFragmentManager().findFragmentByTag(tag) == null) {
-                fragmentTransaction.addToBackStack(null);
-            }
-
-            fragmentTransaction.commit();
-            // TODO disable action bar menu
-
+        // Kiểm tra xem drawer có mở hay không
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            // Kiểm tra xem drawer có mở hay không
-            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                drawerLayout.closeDrawer(GravityCompat.START);
-            } else {
-                drawerLayout.openDrawer(GravityCompat.START);
+            drawerLayout.openDrawer(GravityCompat.START);
 
-            }
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        drawerLayout.closeDrawer(GravityCompat.START);
+        super.onBackPressed();
     }
 
     private void showListBook() {
@@ -152,31 +110,26 @@ public class MainActivity extends AppCompatActivity {
             fragment = (AbstractCustomFragment) getSupportFragmentManager().findFragmentByTag(tag);
         }
 
-        fragment.notifyDataLoaded();
-
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.main_fragment, fragment, tag);
-
-        if (getFragmentManager().findFragmentByTag(tag) == null) {
-            fragmentTransaction.addToBackStack(null);
-        }
-
-        fragmentTransaction.commit();
+        commitFragment(tag);
     }
 
     public void prepareAddBook(View view) {
         String tag = AbstractCustomFragment.ADD_BOOK;
-        if (getFragmentManager().findFragmentByTag(tag) == null) {
+        if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
             fragment = new AddBookFragment();
         }
         else {
             fragment = (AbstractCustomFragment)getSupportFragmentManager().findFragmentByTag(tag);
         }
 
+        commitFragment(tag);
+    }
+
+    void commitFragment(String tag) {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment, fragment, tag);
 
-        if (getFragmentManager().findFragmentByTag(tag) == null) {
+        if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
             fragmentTransaction.addToBackStack(null);
         }
 

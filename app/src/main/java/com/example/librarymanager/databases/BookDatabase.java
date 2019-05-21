@@ -22,9 +22,19 @@ public class BookDatabase {
         query = reference.orderByChild("category").equalTo(categoryName);
     }
 
-    public void setValueEventListener(ValueEventListener valueEventListener) {
+    public void getBooksWithName(String param) {
+        reference = FirebaseDatabase.getInstance().getReference(NODE_NAME);
+        query = reference.orderByChild("name").equalTo(param);
+    }
+
+    public void addValueEventListener(ValueEventListener valueEventListener) {
         query.addValueEventListener(valueEventListener);
     }
+
+    public void addListenerForSingleValueEventListener(ValueEventListener valueEventListener) {
+        query.addListenerForSingleValueEvent(valueEventListener);
+    }
+
 
     public void writeNew(BookModel book) {
         book.setId(reference.push().getKey());

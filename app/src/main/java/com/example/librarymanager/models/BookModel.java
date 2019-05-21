@@ -5,6 +5,7 @@ public class BookModel {
     private String name;
     private String author;
     private String category;
+    private String borrower;
 
     // TODO Change imageResource to image from file or camera
     private String image;
@@ -59,11 +60,11 @@ public class BookModel {
         this.image = image;
     }
 
-//    public String getBorrower() {
-//        return borrower;
-//    }
-//
-//    public void setBorrower(String borrower) {
-//        this.borrower = borrower;
-//    }
+    public String getBorrower() {
+        return borrower;
+    }
+
+    public void setBorrower(String borrower) {
+        this.borrower = borrower;
+    }
 }

@@ -8,14 +8,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.example.librarymanager.R;
+import com.example.librarymanager.databases.IDataListener;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-public abstract class AbstractCustomFragment extends Fragment {
+public abstract class AbstractCustomFragment extends Fragment implements IDataListener {
     static final int CAMERA = 0, GALLERY = 1;
 
     public static final String ADD_BOOK = "add_book";
@@ -26,8 +28,12 @@ public abstract class AbstractCustomFragment extends Fragment {
     FragmentTransaction fragmentTransaction;
 
     void capturePicture() {
-        Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(captureImage, CAMERA);
+//        Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(captureImage, CAMERA);
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, CAMERA);
+        }
     }
 
     void choosePicture() {
@@ -38,7 +44,7 @@ public abstract class AbstractCustomFragment extends Fragment {
 
     String convertBitmapToString(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 64, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 75, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
 
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
@@ -48,7 +54,6 @@ public abstract class AbstractCustomFragment extends Fragment {
         Bitmap bitmap = null;
         try{
             byte [] encodeByte=Base64.decode(encodedImageString,Base64.DEFAULT);
-
             InputStream inputStream  = new ByteArrayInputStream(encodeByte);
             bitmap = BitmapFactory.decodeStream(inputStream);
 
@@ -58,34 +63,19 @@ public abstract class AbstractCustomFragment extends Fragment {
         return bitmap;
     }
 
-    Bitmap loadLargeImage(int imageId, int imageHeight, int imageWidth){
-        final BitmapFactory.Options option = new BitmapFactory.Options();
-
-        option.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(getResources(), imageId, option);
-
-        final int originalHeight = option.outHeight;
-        final int originalWidth = option.outWidth;
-        int inSampleSize = 1;
-
-        while ((originalHeight / inSampleSize * 2) > imageHeight
-                &&(originalWidth / inSampleSize * 2) > imageWidth) {
-            inSampleSize *= 2;
-        }
-
-        option.inSampleSize = inSampleSize;
-        option.inJustDecodeBounds = false;
-
-        return BitmapFactory.decodeResource(getResources(), imageId, option);
+    Bitmap getScaledVersion(Bitmap bitmap, ImageView imageView) {
+        return Bitmap.createScaledBitmap(bitmap,
+                imageView.getWidth(),
+                imageView.getHeight(),
+                false);
     }
 
     public void finish() {
         if (getFragmentManager() != null) {
             if (getFragmentManager().findFragmentByTag(LIST_BOOK) == null) {
                 fragment = new AddBookFragment();
-            }
-            else {
-                fragment = (AbstractCustomFragment)getFragmentManager().findFragmentByTag(LIST_BOOK);
+            } else {
+                fragment = (AbstractCustomFragment) getFragmentManager().findFragmentByTag(LIST_BOOK);
             }
 
             fragmentTransaction = getFragmentManager().beginTransaction();
@@ -98,6 +88,4 @@ public abstract class AbstractCustomFragment extends Fragment {
             fragmentTransaction.commit();
         }
     }
-
-    public abstract void notifyDataLoaded();
 }

@@ -20,6 +20,13 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<AbstractCustomViewH
     private int layoutId;
     private ArrayList dataSource;
 
+    private AdapterFunction adapterFunction = new AdapterFunction() {
+        @Override
+        public void updateData() {
+            notifyDataSetChanged();
+        }
+    };
+
     private View.OnClickListener clickListener;
 
     public void setClickListener(View.OnClickListener clickListener) {

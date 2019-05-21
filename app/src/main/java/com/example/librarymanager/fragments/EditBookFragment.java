@@ -2,7 +2,6 @@ package com.example.librarymanager.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.support.v7.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
-
+import android.widget.Toast;
 
 import com.example.librarymanager.R;
 import com.example.librarymanager.databases.BookDatabase;
@@ -28,7 +26,6 @@ import com.example.librarymanager.databases.DataStorage;
 import com.example.librarymanager.models.BookModel;
 
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 import static android.app.Activity.RESULT_OK;
 import static android.text.TextUtils.isEmpty;
@@ -172,6 +169,11 @@ public class EditBookFragment extends AbstractCustomFragment {
             return false;
         }
 
+        if (selectedBitMap == null) {
+            Toast.makeText(getActivity(), "Vui lòng chọn hoặc chụp hình ảnh của sách", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
     }
 
@@ -200,17 +202,36 @@ public class EditBookFragment extends AbstractCustomFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 100 && resultCode == RESULT_OK) {
-            selectedBitMap = (Bitmap) data.getExtras().get("data");
-            imgPicture.setImageBitmap(selectedBitMap);
-        } else if (requestCode == 200 && resultCode == RESULT_OK) {
-            try {
-                Uri imageUri = data.getData();
-                selectedBitMap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
-                imgPicture.setImageBitmap(selectedBitMap);
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case CAMERA:
+                    Bundle extras = data.getExtras();
+                    try {
+                        selectedBitMap = (Bitmap) extras.get("data");
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case GALLERY:
+                    Uri imageUri = data.getData();
+                    try {
+                        selectedBitMap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
+
+            if (selectedBitMap != null) {
+                imgPicture.setImageBitmap(getScaledVersion(selectedBitMap, imgPicture));
+            } else {
+                Toast.makeText(getActivity(), "Bạn chưa chọn ảnh", Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            Toast.makeText(getActivity(), "Không chọn được ảnh", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -219,7 +240,12 @@ public class EditBookFragment extends AbstractCustomFragment {
     }
 
     @Override
-    public void notifyDataLoaded() {
+    public void bookLoaded() {
+
+    }
+
+    @Override
+    public void categoryLoaded() {
 
     }
 }

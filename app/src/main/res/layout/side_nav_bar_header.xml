@@ -11,6 +11,7 @@
     android:paddingRight="@dimen/side_nav_bar_padding"
     android:paddingBottom="@dimen/side_nav_bar_padding"
     android:paddingLeft="@dimen/side_nav_bar_padding"
+    android:fitsSystemWindows="true"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView

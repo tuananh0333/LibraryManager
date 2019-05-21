@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,21 +18,21 @@ import java.io.InputStream;
 public class BookViewHolderAbstract extends AbstractCustomViewHolder {
     private final ImageView bookImage;
     private final TextView bookName;
-    private TextView bookAuthor;
+    private final TextView bookStatus;
 
     public BookViewHolderAbstract(@NonNull View itemView) {
         super(itemView);
 
         bookImage = itemView.findViewById(R.id.imgBook);
-        bookName = itemView.findViewById(R.id.txtBookName);
-        //TODO find book state textView from itemView
+        bookName = itemView.findViewById(R.id.lblBookName);
+        bookStatus = itemView.findViewById(R.id.lblStatus);
     }
 
     @Override
     public void setData(Object data) {
         BookModel book = (BookModel) data;
 
-        if (bookImage != null) {
+        if (bookImage != null && book.getImage() != null) {
             try{
                 byte [] encodeByte= Base64.decode(book.getImage(),Base64.DEFAULT);
 
@@ -43,12 +44,12 @@ public class BookViewHolderAbstract extends AbstractCustomViewHolder {
                 e.getMessage();
             }
         }
-        if (bookName != null) {
+        if (bookName != null && book.getName() != null) {
             this.bookName.setText(book.getName());
         }
 
-        if (bookAuthor != null) {
-            this.bookAuthor.setText(book.getAuthor());
+        if (bookStatus != null) {
+            bookStatus.setText(book.getBorrower() != null ? R.string.status_unavaiable : R.string.status_available);
         }
     }
 }

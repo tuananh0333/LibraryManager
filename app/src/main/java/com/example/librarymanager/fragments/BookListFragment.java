@@ -4,39 +4,27 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 
 import com.example.librarymanager.R;
 import com.example.librarymanager.adapters.RecycleViewAdapter;
-import com.example.librarymanager.databases.BookDatabase;
 import com.example.librarymanager.databases.DataStorage;
 import com.example.librarymanager.models.BookModel;
-import com.example.librarymanager.models.CategoryModel;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 public class BookListFragment extends AbstractCustomFragment {
     private RecyclerView categoryRecyclerView, bookRecyclerView;
     private ProgressBar progressBar;
+    private SearchView searchView;
 
     private RecycleViewAdapter bookAdapter, categoryAdapter;
 
-    private BookDatabase bookDatabase;
-
-    private boolean isLoaded = false;
-
-    private Button btnAdd;
+    DataStorage dataStorage;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,10 +32,12 @@ public class BookListFragment extends AbstractCustomFragment {
         view = inflater.inflate(R.layout.main_layout, container, false);
 
         addControllers(view);
+        addEvents();
 
-        initCategory(getActivity());
+        dataStorage = new DataStorage(this);
 
-        initBook(getContext(), 0);
+        initCategory(getContext());
+        initBook(getContext());
 
         return view;
     }
@@ -55,9 +45,29 @@ public class BookListFragment extends AbstractCustomFragment {
     private void addControllers(View view) {
         bookRecyclerView = view.findViewById(R.id.book_list);
         categoryRecyclerView = view.findViewById(R.id.category_list);
+
+        searchView = view.findViewById(R.id.search_param);
+
         progressBar = view.findViewById(R.id.process_bar);
         progressBar.setMax(100);
         progressBar.setVisibility(View.VISIBLE);
+
+        // TODO Đổi style category đang chọn
+    }
+
+    private void addEvents() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                dataStorage.getBookDataWithName(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 
     private void initCategory(Context context)
@@ -67,31 +77,19 @@ public class BookListFragment extends AbstractCustomFragment {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         categoryRecyclerView.setLayoutManager(layoutManager);
 
-        // Set up adapter
-        if (isLoaded) {
-            categoryAdapter = new RecycleViewAdapter(R.layout.category_view_layout, DataStorage.categoryList);
-        }
-        else {
-            categoryAdapter = new RecycleViewAdapter(R.layout.category_view_layout, new ArrayList<CategoryModel>());
-        }
+        categoryAdapter = new RecycleViewAdapter(R.layout.category_view_layout, DataStorage.categoryList);
+
         categoryAdapter.setClickListener(onCategoryClick);
         categoryRecyclerView.setAdapter(categoryAdapter);
+        categoryRecyclerView.setVisibility(View.GONE);
     }
 
-    private void initBook(Context context, int categoryId)
+    private void initBook(Context context)
     {
-        if (bookAdapter != null) {
-            // TODO clear list and prepare for new data
-        }
-
         // Setup Recycle View
         LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(context);
-//        GridLayoutManager verticalLayoutManager = new GridLayoutManager(context, 2);
         verticalLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         bookRecyclerView.setLayoutManager(verticalLayoutManager);
-
-        bookDatabase = new BookDatabase(categoryId);
-        bookDatabase.setValueEventListener(bookValueEventListener);
 
         // Set up adapter
         bookAdapter = new RecycleViewAdapter(R.layout.book_view_layout, DataStorage.bookList);
@@ -102,9 +100,11 @@ public class BookListFragment extends AbstractCustomFragment {
     View.OnClickListener onCategoryClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-            int categoryId = categoryRecyclerView.getChildAdapterPosition(v);
-            initBook(getContext(), categoryId);
+        // TODO Đổi style category đang chọn
+        int categoryId = categoryRecyclerView.getChildAdapterPosition(v);
+        dataStorage.getBookDataWithCategoryId(categoryId);
+        bookRecyclerView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         }
     };
 
@@ -128,34 +128,25 @@ public class BookListFragment extends AbstractCustomFragment {
         }
     };
 
-    ValueEventListener bookValueEventListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            DataStorage.bookList.clear();
-
-            for (DataSnapshot data : dataSnapshot.getChildren()) {
-                if (data.getValue() != null) {
-                    BookModel book = data.getValue(BookModel.class);
-                    if (book != null) {
-                        book.setId(data.getKey());
-                        DataStorage.bookList.add(book);
-                    }
-                }
-            }
-
-            bookAdapter.notifyDataSetChanged();
-
-            progressBar.setVisibility(View.GONE);
+    @Override
+    public void bookLoaded() {
+        bookAdapter.notifyDataSetChanged();
+        if (DataStorage.bookList.size() > 0) {
+            bookRecyclerView.setVisibility(View.VISIBLE);
+        } else {
+            // TODO alert no data
         }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-    };
+        progressBar.setVisibility(View.GONE);
+    }
 
     @Override
-    public void notifyDataLoaded() {
-        isLoaded = true;
+    public void categoryLoaded() {
+        categoryAdapter.notifyDataSetChanged();
+
+        if (DataStorage.categoryList.size() > 0) {
+            categoryRecyclerView.setVisibility(View.VISIBLE);
+        } else {
+            // TODO alert no data
+        }
     }
 }
