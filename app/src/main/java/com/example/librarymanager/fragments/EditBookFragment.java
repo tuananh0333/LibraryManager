@@ -1,5 +1,7 @@
 package com.example.librarymanager.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -34,7 +36,7 @@ import static android.text.TextUtils.isEmpty;
 public class EditBookFragment extends AbstractCustomFragment {
     private EditText edtBookName, edtBookAuthor;
     private Spinner spnCategory;
-    private Button btnCancel, btnUpdate;
+    private Button btnCancel, btnUpdate, btnDelete;
     private ImageButton btnCapture, btnChoose;
     private ImageView imgPicture;
 
@@ -71,6 +73,7 @@ public class EditBookFragment extends AbstractCustomFragment {
         spnCategory = view.findViewById(R.id.spnBookCategory);
         btnCancel = view.findViewById(R.id.btnCancel);
         btnUpdate = view.findViewById(R.id.btnAdd);
+        btnDelete = view.findViewById(R.id.btnDelete);
 
         btnCapture = view.findViewById(R.id.btnCapture);
         btnChoose = view.findViewById(R.id.btnChoose);
@@ -86,7 +89,8 @@ public class EditBookFragment extends AbstractCustomFragment {
             edtBookName.setText(currentBook.getName());
             edtBookAuthor.setText(currentBook.getAuthor());
             spnCategory.setSelection(DataStorage.getCategoryListName().indexOf(currentBook.getCategory()));
-            imgPicture.setImageBitmap(convertStringToBitmap(currentBook.getImage()));
+            selectedBitMap = convertStringToBitmap(currentBook.getImage());
+            imgPicture.setImageBitmap(selectedBitMap);
         }
     }
 
@@ -102,6 +106,13 @@ public class EditBookFragment extends AbstractCustomFragment {
             @Override
             public void onClick(View v) {
             updateBook();
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteBook();
             }
         });
 
@@ -162,6 +173,29 @@ public class EditBookFragment extends AbstractCustomFragment {
         }
 
         return true;
+    }
+
+    private void deleteBook() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.delete_confirm);
+        builder.setMessage("Bạn muốn xóa!");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton("Xóa", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                BookDatabase bookDatabase = new BookDatabase();
+                bookDatabase.delete(currentBook.getId());
+                finish();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override

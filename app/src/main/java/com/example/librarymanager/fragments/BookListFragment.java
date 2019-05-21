@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.example.librarymanager.R;
@@ -34,6 +35,8 @@ public class BookListFragment extends AbstractCustomFragment {
     private BookDatabase bookDatabase;
 
     private boolean isLoaded = false;
+
+    private Button btnAdd;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -82,7 +85,8 @@ public class BookListFragment extends AbstractCustomFragment {
         }
 
         // Setup Recycle View
-        GridLayoutManager verticalLayoutManager = new GridLayoutManager(context, 2);
+        LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(context);
+//        GridLayoutManager verticalLayoutManager = new GridLayoutManager(context, 2);
         verticalLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         bookRecyclerView.setLayoutManager(verticalLayoutManager);
 
@@ -141,7 +145,7 @@ public class BookListFragment extends AbstractCustomFragment {
 
             bookAdapter.notifyDataSetChanged();
 
-            progressBar.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.GONE);
         }
 
         @Override

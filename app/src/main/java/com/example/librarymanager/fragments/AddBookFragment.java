@@ -2,6 +2,7 @@ package com.example.librarymanager.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,14 +28,19 @@ import com.example.librarymanager.databases.DataStorage;
 import com.example.librarymanager.models.BookModel;
 import com.example.librarymanager.utils.TextValidator;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.text.TextUtils.isEmpty;
 
 public class AddBookFragment extends AbstractCustomFragment{
+    private final int GALLERY = 1, CAMERA = 2;
+
     private EditText edtBookName, edtBookAuthor;
     private Spinner spnCategory;
     private ImageButton btnCapture, btnChoose;
@@ -174,13 +180,22 @@ public class AddBookFragment extends AbstractCustomFragment{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 100 && resultCode == RESULT_OK) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_CANCELED) {
+            return;
+        }
+
+        if (requestCode == CAMERA && resultCode == RESULT_OK) {
             selectedBitMap = (Bitmap) data.getExtras().get("data");
             imgPicture.setImageBitmap(selectedBitMap);
-        } else if (requestCode == 200 && resultCode == RESULT_OK) {
+        } else if (requestCode == GALLERY && resultCode == RESULT_OK) {
             try {
                 Uri imageUri = data.getData();
                 selectedBitMap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                selectedBitMap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStream);
+                selectedBitMap = BitmapFactory.decodeStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
                 imgPicture.setImageBitmap(selectedBitMap);
             } catch (IOException e) {
                 e.printStackTrace();

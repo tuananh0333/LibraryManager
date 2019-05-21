@@ -30,6 +30,7 @@
 
     <!--TITLE-->
     <string name="title_add_book">Thêm sách mới</string>
+    <string name="delete_confirm">Xác nhận xóa</string>
 
     <!--TEXT VIEW-->
     <string name="txt_book_name">Tên sách</string>

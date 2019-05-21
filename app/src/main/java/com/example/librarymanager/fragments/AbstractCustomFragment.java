@@ -16,6 +16,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 public abstract class AbstractCustomFragment extends Fragment {
+    static final int CAMERA = 0, GALLERY = 1;
+
     public static final String ADD_BOOK = "add_book";
     public static final String LIST_BOOK = "list_book";
     static final String EDIT_BOOK = "edit_book";
@@ -25,13 +27,13 @@ public abstract class AbstractCustomFragment extends Fragment {
 
     void capturePicture() {
         Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(captureImage, 100);
+        startActivityForResult(captureImage, CAMERA);
     }
 
     void choosePicture() {
         Intent pickImage = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickImage, 200);
+        startActivityForResult(pickImage, GALLERY);
     }
 
     String convertBitmapToString(Bitmap bitmap) {
@@ -54,6 +56,27 @@ public abstract class AbstractCustomFragment extends Fragment {
             Log.d("Exception", e.getMessage());
         }
         return bitmap;
+    }
+
+    Bitmap loadLargeImage(int imageId, int imageHeight, int imageWidth){
+        final BitmapFactory.Options option = new BitmapFactory.Options();
+
+        option.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(getResources(), imageId, option);
+
+        final int originalHeight = option.outHeight;
+        final int originalWidth = option.outWidth;
+        int inSampleSize = 1;
+
+        while ((originalHeight / inSampleSize * 2) > imageHeight
+                &&(originalWidth / inSampleSize * 2) > imageWidth) {
+            inSampleSize *= 2;
+        }
+
+        option.inSampleSize = inSampleSize;
+        option.inJustDecodeBounds = false;
+
+        return BitmapFactory.decodeResource(getResources(), imageId, option);
     }
 
     public void finish() {

@@ -10,9 +10,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.librarymanager.R;
 import com.example.librarymanager.databases.CategoryDatabase;
@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private RecyclerView tableList;
+    private Button btnAdd;
 
     private AbstractCustomFragment fragment;
     private FragmentTransaction fragmentTransaction;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private void addControl() {
         drawerLayout = findViewById(R.id.drawer_layout);
         tableList = findViewById(R.id.table_list);
+        btnAdd = findViewById(R.id.btnPrepareAddBook);
     }
 
     private void loadData() {
@@ -99,13 +101,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.main_menu, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater menuInflater = getMenuInflater();
+//        menuInflater.inflate(R.menu.main_menu, menu);
+//
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -151,6 +153,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
         fragment.notifyDataLoaded();
+
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_fragment, fragment, tag);
+
+        if (getFragmentManager().findFragmentByTag(tag) == null) {
+            fragmentTransaction.addToBackStack(null);
+        }
+
+        fragmentTransaction.commit();
+    }
+
+    public void prepareAddBook(View view) {
+        String tag = AbstractCustomFragment.ADD_BOOK;
+        if (getFragmentManager().findFragmentByTag(tag) == null) {
+            fragment = new AddBookFragment();
+        }
+        else {
+            fragment = (AbstractCustomFragment)getSupportFragmentManager().findFragmentByTag(tag);
+        }
 
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment, fragment, tag);

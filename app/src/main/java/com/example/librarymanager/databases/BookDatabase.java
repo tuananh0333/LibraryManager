@@ -36,6 +36,6 @@ public class BookDatabase {
     }
 
     public void delete(String id) {
-
+        reference.child(id).removeValue();
     }
 }
