@@ -1,5 +1,7 @@
 package com.example.librarymanager.views;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -56,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                 final String password = edtPassword.getText().toString().trim();
 
                 if (!username.equals("") && !password.equals("")) {
-                    final String email = username + "@libmanager.tdc.edu.vn";
+                    final String email = username + "@lib.tdc.edu.vn";
                     Log.w("email: ", email);
                     login(email, password);
                 }
@@ -126,5 +128,26 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.quit_confirm);
+        builder.setMessage("Bạn muốn thoát!");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finishAffinity();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

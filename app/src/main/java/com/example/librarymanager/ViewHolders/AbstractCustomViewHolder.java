@@ -10,4 +10,6 @@ public abstract class AbstractCustomViewHolder extends ViewHolder {
     }
 
     public abstract void setData(Object data);
+
+    public abstract void setActive();
 }

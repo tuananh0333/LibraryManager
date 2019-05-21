@@ -23,7 +23,7 @@ public class BorrowBookFragment extends AbstractCustomFragment implements IDataL
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.add_book_layout, container, false);
+        final View view = inflater.inflate(R.layout.borrow_book_layout, container, false);
 
         addControllers(view);
         addEvents(view);
@@ -35,11 +35,27 @@ public class BorrowBookFragment extends AbstractCustomFragment implements IDataL
         edtBookID = view.findViewById(R.id.edtBookId);
         edtBorrowerId = view.findViewById(R.id.edtBorrowerId);
 
-        //TODO find other view
+        lblBorrowedDate = view.findViewById(R.id.lblBorrowDate);
+        lblDueDate = view.findViewById(R.id.lblDueDate);
+
+        btnCancel = view.findViewById(R.id.btnCancel);
+        btnConfirm = view.findViewById(R.id.btnConfirm);
     }
 
     private void addEvents(View view) {
-        // TODO add view event
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -49,6 +65,16 @@ public class BorrowBookFragment extends AbstractCustomFragment implements IDataL
 
     @Override
     public void categoryLoaded() {
+
+    }
+
+    @Override
+    public String getFragmentTag() {
+        return BORROW_BOOK;
+    }
+
+    @Override
+    public void setData(Object data) {
 
     }
 }

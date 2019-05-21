@@ -1,5 +1,8 @@
 package com.example.librarymanager.views;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -9,13 +12,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.librarymanager.R;
 import com.example.librarymanager.fragments.AbstractCustomFragment;
 import com.example.librarymanager.fragments.AddBookFragment;
 import com.example.librarymanager.fragments.BookListFragment;
+import com.example.librarymanager.fragments.BorrowBookFragment;
+import com.example.librarymanager.fragments.EditBookFragment;
 
 public class MainActivity extends AppCompatActivity{
     private DrawerLayout drawerLayout;
@@ -27,6 +32,8 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.main_layout_with_drawer);
 
         ActionBar actionBar = getSupportActionBar();
@@ -41,13 +48,13 @@ public class MainActivity extends AppCompatActivity{
         addControls();
         addEvents();
 
-        showListBook();
+        commitFragment(AbstractCustomFragment.LIST_BOOK, null);
     }
 
     private void addDrawerToggle(ActionBar actionBar){
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        final DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout = findViewById(R.id.drawer_layout);
 
         final ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.openDrawer, R.string.closeDrawer);
         drawerLayout.addDrawerListener(drawerToggle);
@@ -69,9 +76,10 @@ public class MainActivity extends AppCompatActivity{
 
                 switch (menuItem.getItemId()) {
                     case R.id.nav_add:
-                        prepareAddBook(menuItem.getActionView());
+                        commitFragment(AbstractCustomFragment.ADD_BOOK, null);
                         break;
                     case R.id.nav_borrow:
+                        commitFragment(AbstractCustomFragment.BORROW_BOOK, null);
                         break;
                     case R.id.nav_details:
                         break;
@@ -98,41 +106,65 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public void onBackPressed() {
         drawerLayout.closeDrawer(GravityCompat.START);
-        super.onBackPressed();
-    }
 
-    private void showListBook() {
-        String tag = AbstractCustomFragment.LIST_BOOK;
-        if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
-            fragment = new BookListFragment();
+        if (fragment == null || fragment.getFragmentTag().equals(AbstractCustomFragment.LIST_BOOK)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.logout_confirm);
+            builder.setMessage("Bạn muốn đăng xuất!");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Hủy", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            builder.setNegativeButton("Đăng xuất", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         }
         else {
-            fragment = (AbstractCustomFragment) getSupportFragmentManager().findFragmentByTag(tag);
+            fragment.finish();
+            return;
         }
-
-        commitFragment(tag);
     }
 
-    public void prepareAddBook(View view) {
-        String tag = AbstractCustomFragment.ADD_BOOK;
+    public void commitFragment(String tag, Object data) {
         if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
-            fragment = new AddBookFragment();
-        }
-        else {
+            switch (tag) {
+                case AbstractCustomFragment.ADD_BOOK:
+                    fragment = new AddBookFragment();
+                    break;
+                case AbstractCustomFragment.LIST_BOOK:
+                    fragment = new BookListFragment();
+                    break;
+                case AbstractCustomFragment.BORROW_BOOK:
+                    fragment = new BorrowBookFragment();
+                    break;
+                case AbstractCustomFragment.ADD_USER:
+                    // TODO Add user fragment
+//                    fragment = new AddUserFragment();
+                    break;
+                case AddBookFragment.EDIT_BOOK:
+                    fragment = new EditBookFragment();
+                    fragment.setData(data);
+                    break;
+            }
+        } else {
             fragment = (AbstractCustomFragment)getSupportFragmentManager().findFragmentByTag(tag);
         }
 
-        commitFragment(tag);
-    }
+        fragment.setActivity(this);
 
-    void commitFragment(String tag) {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_fragment, fragment, tag);
-
         if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
             fragmentTransaction.addToBackStack(null);
         }
-
         fragmentTransaction.commit();
     }
 }

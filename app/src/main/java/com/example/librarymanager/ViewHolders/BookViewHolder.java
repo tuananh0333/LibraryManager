@@ -15,12 +15,12 @@ import com.example.librarymanager.models.BookModel;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-public class BookViewHolderAbstract extends AbstractCustomViewHolder {
+public class BookViewHolder extends AbstractCustomViewHolder {
     private final ImageView bookImage;
     private final TextView bookName;
     private final TextView bookStatus;
 
-    public BookViewHolderAbstract(@NonNull View itemView) {
+    public BookViewHolder(@NonNull View itemView) {
         super(itemView);
 
         bookImage = itemView.findViewById(R.id.imgBook);
@@ -51,5 +51,10 @@ public class BookViewHolderAbstract extends AbstractCustomViewHolder {
         if (bookStatus != null) {
             bookStatus.setText(book.getBorrower() != null ? R.string.status_unavaiable : R.string.status_available);
         }
+    }
+
+    @Override
+    public void setActive() {
+
     }
 }

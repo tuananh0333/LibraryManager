@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 
 import com.example.librarymanager.R;
+import com.example.librarymanager.ViewHolders.CategoryViewHolder;
 import com.example.librarymanager.adapters.RecycleViewAdapter;
 import com.example.librarymanager.databases.DataStorage;
 import com.example.librarymanager.models.BookModel;
@@ -29,7 +30,7 @@ public class BookListFragment extends AbstractCustomFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view;
-        view = inflater.inflate(R.layout.main_layout, container, false);
+        view = inflater.inflate(R.layout.list_book_layout, container, false);
 
         addControllers(view);
         addEvents();
@@ -77,7 +78,7 @@ public class BookListFragment extends AbstractCustomFragment {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         categoryRecyclerView.setLayoutManager(layoutManager);
 
-        categoryAdapter = new RecycleViewAdapter(R.layout.category_view_layout, DataStorage.categoryList);
+        categoryAdapter = new RecycleViewAdapter(R.layout.card_category_layout, DataStorage.categoryList);
 
         categoryAdapter.setClickListener(onCategoryClick);
         categoryRecyclerView.setAdapter(categoryAdapter);
@@ -92,7 +93,7 @@ public class BookListFragment extends AbstractCustomFragment {
         bookRecyclerView.setLayoutManager(verticalLayoutManager);
 
         // Set up adapter
-        bookAdapter = new RecycleViewAdapter(R.layout.book_view_layout, DataStorage.bookList);
+        bookAdapter = new RecycleViewAdapter(R.layout.card_book_layout, DataStorage.bookList);
         bookAdapter.setClickListener(onBookClick);
         bookRecyclerView.setAdapter(bookAdapter);
     }
@@ -100,31 +101,19 @@ public class BookListFragment extends AbstractCustomFragment {
     View.OnClickListener onCategoryClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-        // TODO Đổi style category đang chọn
-        int categoryId = categoryRecyclerView.getChildAdapterPosition(v);
-        dataStorage.getBookDataWithCategoryId(categoryId);
-        bookRecyclerView.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+            // TODO active category card
+            int categoryId = categoryRecyclerView.getChildAdapterPosition(v);
+            dataStorage.getBookDataWithCategoryId(categoryId);
+            bookRecyclerView.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
         }
     };
 
     View.OnClickListener onBookClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-        if (getFragmentManager() != null) {
-            fragment = new EditBookFragment();
-
-            // Get data
-            BookModel book = DataStorage.bookList.get(bookRecyclerView.getChildAdapterPosition(v));
-            ((EditBookFragment) fragment).getData(book);
-
-            // Prepare fragment
-            fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.main_fragment, fragment, AbstractCustomFragment.EDIT_BOOK);
-
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        }
+                int bookIndex = bookRecyclerView.getChildAdapterPosition(v);
+                activity.commitFragment(AbstractCustomFragment.EDIT_BOOK, DataStorage.bookList.get(bookIndex));
         }
     };
 
@@ -148,5 +137,15 @@ public class BookListFragment extends AbstractCustomFragment {
         } else {
             // TODO alert no data
         }
+    }
+
+    @Override
+    public String getFragmentTag() {
+        return LIST_BOOK;
+    }
+
+    @Override
+    public void setData(Object data) {
+
     }
 }

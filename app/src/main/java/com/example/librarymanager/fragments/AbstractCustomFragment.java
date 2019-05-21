@@ -6,12 +6,14 @@ import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.librarymanager.R;
 import com.example.librarymanager.databases.IDataListener;
+import com.example.librarymanager.views.MainActivity;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -21,17 +23,25 @@ public abstract class AbstractCustomFragment extends Fragment implements IDataLi
     static final int CAMERA = 0, GALLERY = 1;
 
     public static final String ADD_BOOK = "add_book";
-    public static final String LIST_BOOK = "list_book";
-    static final String EDIT_BOOK = "edit_book";
+    public static final String LIST_BOOK = "list_book_layout";
+    public static final String ADD_USER = "add_user";
+    public static final String BORROW_BOOK = "borrow_book";
+    public static final String EDIT_BOOK = "edit_book";
+
+    MainActivity activity;
 
     AbstractCustomFragment fragment;
     FragmentTransaction fragmentTransaction;
 
+    public abstract String getFragmentTag();
+
+    public void setActivity(MainActivity activity) {
+        this.activity = activity;
+    }
+
     void capturePicture() {
-//        Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        startActivityForResult(captureImage, CAMERA);
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, CAMERA);
         }
     }
@@ -71,21 +81,8 @@ public abstract class AbstractCustomFragment extends Fragment implements IDataLi
     }
 
     public void finish() {
-        if (getFragmentManager() != null) {
-            if (getFragmentManager().findFragmentByTag(LIST_BOOK) == null) {
-                fragment = new AddBookFragment();
-            } else {
-                fragment = (AbstractCustomFragment) getFragmentManager().findFragmentByTag(LIST_BOOK);
-            }
-
-            fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.main_fragment, fragment, LIST_BOOK);
-
-            if (getFragmentManager().findFragmentByTag(LIST_BOOK) == null) {
-                fragmentTransaction.addToBackStack(null);
-            }
-
-            fragmentTransaction.commit();
-        }
+        activity.commitFragment(LIST_BOOK, null);
     }
+
+    public abstract void setData(Object data);
 }

@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.librarymanager.R;
-import com.example.librarymanager.ViewHolders.BookViewHolderAbstract;
-import com.example.librarymanager.ViewHolders.CategoryViewHolderAbstract;
+import com.example.librarymanager.ViewHolders.BookViewHolder;
+import com.example.librarymanager.ViewHolders.CategoryViewHolder;
 import com.example.librarymanager.ViewHolders.AbstractCustomViewHolder;
 
 import org.jetbrains.annotations.NotNull;
@@ -51,11 +51,11 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<AbstractCustomViewH
             }
         });
 
-        if (viewType == R.layout.book_view_layout) {
-            return new BookViewHolderAbstract(cardView);
+        if (viewType == R.layout.card_book_layout) {
+            return new BookViewHolder(cardView);
         }
         else {
-            return new CategoryViewHolderAbstract(cardView);
+            return new CategoryViewHolder(cardView);
         }
     }
 

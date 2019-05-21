@@ -7,10 +7,10 @@ import android.widget.TextView;
 import com.example.librarymanager.R;
 import com.example.librarymanager.models.CategoryModel;
 
-public class CategoryViewHolderAbstract extends AbstractCustomViewHolder {
+public class CategoryViewHolder extends AbstractCustomViewHolder {
     private TextView categoryName;
 
-    public CategoryViewHolderAbstract(@NonNull View itemView) {
+    public CategoryViewHolder(@NonNull View itemView) {
         super(itemView);
         categoryName = itemView.findViewById(R.id.txtCategory);
     }
@@ -19,5 +19,12 @@ public class CategoryViewHolderAbstract extends AbstractCustomViewHolder {
     public void setData(Object data) {
         CategoryModel category = (CategoryModel) data;
         this.categoryName.setText(category.getName());
+    }
+
+    @Override
+    public void setActive() {
+        if (this.categoryName != null) {
+            this.categoryName.setBackgroundResource(R.color.active);
+        }
     }
 }

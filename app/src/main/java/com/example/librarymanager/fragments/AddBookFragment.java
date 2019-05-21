@@ -191,4 +191,14 @@ public class AddBookFragment extends AbstractCustomFragment{
     public void categoryLoaded() {
 
     }
+
+    @Override
+    public String getFragmentTag() {
+        return ADD_BOOK;
+    }
+
+    @Override
+    public void setData(Object data) {
+
+    }
 }

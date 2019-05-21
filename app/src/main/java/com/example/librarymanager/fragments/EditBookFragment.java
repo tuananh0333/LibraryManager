@@ -235,10 +235,6 @@ public class EditBookFragment extends AbstractCustomFragment {
         }
     }
 
-    public void getData(BookModel book) {
-        currentBook = book;
-    }
-
     @Override
     public void bookLoaded() {
 
@@ -247,5 +243,15 @@ public class EditBookFragment extends AbstractCustomFragment {
     @Override
     public void categoryLoaded() {
 
+    }
+
+    @Override
+    public String getFragmentTag() {
+        return EDIT_BOOK;
+    }
+
+    @Override
+    public void setData(Object data) {
+        currentBook = (BookModel) data;
     }
 }

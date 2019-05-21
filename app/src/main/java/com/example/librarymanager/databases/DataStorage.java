@@ -80,7 +80,6 @@ public class DataStorage {
                         if (book != null) {
                             book.setId(data.getKey());
                             bookList.add(book);
-                            Log.d("abc", book.getId() + " : " + book.getName() + " : " + book.getAuthor());
                         }
                     }
                 }
@@ -138,7 +137,7 @@ public class DataStorage {
                     }
                 }
 
-                Log.d("abc", bookList.size() + " : " + bookList.get(0).toString());
+//                Log.d("abc", bookList.size() + " : " + bookList.get(0).toString());
 //                dataListener.bookLoaded();
             }
 
