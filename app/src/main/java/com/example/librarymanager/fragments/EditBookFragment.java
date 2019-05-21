@@ -1,5 +1,6 @@
 package com.example.librarymanager.fragments;
 
+import android.support.v7.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+
 
 import com.example.librarymanager.R;
 import com.example.librarymanager.databases.BookDatabase;
@@ -157,20 +160,6 @@ public class EditBookFragment extends AbstractCustomFragment {
             edtBookAuthor.requestFocus();
             return false;
         }
-//
-//        String pattern = getString(R.string.name_pattern);
-//
-//        if (!Pattern.matches(pattern, bookName)) {
-//            edtBookName.setError("Tên sách chỉ từ 3 - 16 kí tự chữ và số");
-//            edtBookName.requestFocus();
-//            return false;
-//        }
-//
-//        if (!Pattern.matches(pattern, bookAuthor)) {
-//            edtBookAuthor.setError("Tên tác giả chỉ từ 3 - 16 kí tự chữ và số");
-//            edtBookAuthor.requestFocus();
-//            return false;
-//        }
 
         return true;
     }

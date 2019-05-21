@@ -18,6 +18,7 @@ import com.example.librarymanager.adapters.RecycleViewAdapter;
 import com.example.librarymanager.databases.BookDatabase;
 import com.example.librarymanager.databases.DataStorage;
 import com.example.librarymanager.models.BookModel;
+import com.example.librarymanager.models.CategoryModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -68,7 +69,7 @@ public class BookListFragment extends AbstractCustomFragment {
             categoryAdapter = new RecycleViewAdapter(R.layout.category_view_layout, DataStorage.categoryList);
         }
         else {
-            categoryAdapter = new RecycleViewAdapter(R.layout.category_view_layout, new ArrayList());
+            categoryAdapter = new RecycleViewAdapter(R.layout.category_view_layout, new ArrayList<CategoryModel>());
         }
         categoryAdapter.setClickListener(onCategoryClick);
         categoryRecyclerView.setAdapter(categoryAdapter);
