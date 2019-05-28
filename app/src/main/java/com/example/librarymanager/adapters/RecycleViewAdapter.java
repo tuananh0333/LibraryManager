@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.librarymanager.R;
-import com.example.librarymanager.ViewHolders.BookViewHolder;
-import com.example.librarymanager.ViewHolders.CategoryViewHolder;
-import com.example.librarymanager.ViewHolders.AbstractCustomViewHolder;
+import com.example.librarymanager.viewHolders.BookViewHolder;
+import com.example.librarymanager.viewHolders.CategoryViewHolder;
+import com.example.librarymanager.viewHolders.AbstractCustomViewHolder;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,13 +19,7 @@ import java.util.ArrayList;
 public class RecycleViewAdapter extends RecyclerView.Adapter<AbstractCustomViewHolder> {
     private int layoutId;
     private ArrayList dataSource;
-
-    private AdapterFunction adapterFunction = new AdapterFunction() {
-        @Override
-        public void updateData() {
-            notifyDataSetChanged();
-        }
-    };
+    private int currentSelectedId = -1;
 
     private View.OnClickListener clickListener;
 
@@ -61,6 +55,11 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<AbstractCustomViewH
 
     @Override
     public void onBindViewHolder(@NotNull AbstractCustomViewHolder viewHolder, int i) {
+        if (currentSelectedId == i) {
+            viewHolder.setActive(true);
+        } else {
+            viewHolder.setActive(false);
+        }
         viewHolder.setData(dataSource.get(i));
     }
 
@@ -72,5 +71,10 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<AbstractCustomViewH
     @Override
     public int getItemViewType(int position) {
         return layoutId;
+    }
+
+    public void select(int position) {
+        currentSelectedId = position;
+        notifyDataSetChanged();
     }
 }

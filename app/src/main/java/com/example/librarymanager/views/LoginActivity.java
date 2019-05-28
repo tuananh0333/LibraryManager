@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.librarymanager.R;
+import com.example.librarymanager.databases.UserDatabase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -54,24 +55,16 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = edtUsername.getText().toString().trim();
+                final String username = edtUsername.getText().toString().trim();
                 final String password = edtPassword.getText().toString().trim();
 
-                if (!username.equals("") && !password.equals("")) {
+                if (!username.isEmpty() && !password.isEmpty()) {
                     final String email = username + "@lib.tdc.edu.vn";
-                    Log.w("email: ", email);
                     login(email, password);
                 }
             }
         });
     }
-
-    private View.OnClickListener onLoginClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-        }
-    };
 
     private void login(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
@@ -80,7 +73,6 @@ public class LoginActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d("Login: ", "signInWithEmail:success");
                         FirebaseUser user;
 
                         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -114,8 +106,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        //TODO Tạo intent để chuyển qua mục người dùng / quản lý
-        //TODO Kiểm tra kiểu user
         if (user != null)
         {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -128,10 +118,18 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            updateUI(currentUser);
+        }
     }
 
     @Override
     public void onBackPressed() {
+        logout();
+    }
+
+    public void logout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.quit_confirm);
         builder.setMessage("Bạn muốn thoát!");
@@ -144,6 +142,7 @@ public class LoginActivity extends AppCompatActivity {
         builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                UserDatabase.signOut();
                 finishAffinity();
             }
         });

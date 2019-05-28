@@ -11,4 +11,5 @@
     <color name="sideNavBarStart">#4DB6AC</color>
 
     <color name="active">#F48024</color>
+    <color name="transparent_100">#FFFFFFFF</color>
 </resources>

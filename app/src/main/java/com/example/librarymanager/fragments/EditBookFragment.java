@@ -85,7 +85,7 @@ public class EditBookFragment extends AbstractCustomFragment {
         if (currentBook != null) {
             edtBookName.setText(currentBook.getName());
             edtBookAuthor.setText(currentBook.getAuthor());
-            spnCategory.setSelection(DataStorage.getCategoryListName().indexOf(currentBook.getCategory()));
+            spnCategory.setSelection(DataStorage.getCategoryListId().indexOf(currentBook.getCategory()));
             selectedBitMap = convertStringToBitmap(currentBook.getImage());
             imgPicture.setImageBitmap(selectedBitMap);
         }
@@ -243,11 +243,6 @@ public class EditBookFragment extends AbstractCustomFragment {
     @Override
     public void categoryLoaded() {
 
-    }
-
-    @Override
-    public String getFragmentTag() {
-        return EDIT_BOOK;
     }
 
     @Override

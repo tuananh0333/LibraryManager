@@ -1,4 +1,4 @@
-package com.example.librarymanager.ViewHolders;
+package com.example.librarymanager.viewHolders;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -11,5 +11,5 @@ public abstract class AbstractCustomViewHolder extends ViewHolder {
 
     public abstract void setData(Object data);
 
-    public abstract void setActive();
+    public abstract void setActive(Boolean active);
 }

@@ -24,16 +24,9 @@ public abstract class AbstractCustomFragment extends Fragment implements IDataLi
 
     public static final String ADD_BOOK = "add_book";
     public static final String LIST_BOOK = "list_book_layout";
-    public static final String ADD_USER = "add_user";
-    public static final String BORROW_BOOK = "borrow_book";
     public static final String EDIT_BOOK = "edit_book";
 
     MainActivity activity;
-
-    AbstractCustomFragment fragment;
-    FragmentTransaction fragmentTransaction;
-
-    public abstract String getFragmentTag();
 
     public void setActivity(MainActivity activity) {
         this.activity = activity;

@@ -42,7 +42,7 @@
     <string name="name_pattern">[\p{L}]{3,16}</string>
     <string name="borrow">Mượn sách</string>
     <string name="detail">Thông tin</string>
-    <string name="tools">Cài đặt</string>
+    <string name="logout">Đăng xuất</string>
     <string name="lbl_borrower_name">Người mượn</string>
     <string name="search">Tìm kiếm</string>
     <string name="search_hint">Tìm kiếm theo tên sách</string>
@@ -51,4 +51,5 @@
     <string name="btn_confirm">Xác nhận</string>
     <string name="quit_confirm">Xác nhận thoát</string>
     <string name="logout_confirm">Xác nhận đăng xuất</string>
+    <string name="sign_up">Tạo tài khoản</string>
 </resources>

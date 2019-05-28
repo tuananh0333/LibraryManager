@@ -1,11 +1,14 @@
 package com.example.librarymanager.models;
 
+import java.util.Date;
+
 public class BookModel {
     private String id;
     private String name;
     private String author;
     private String category;
     private String borrower;
+    private Date borrowedDate;
 
     // TODO Change imageResource to image from file or camera
     private String image;
@@ -44,13 +47,13 @@ public class BookModel {
         this.category = category;
     }
 
-//    public Date getBorrowDate() {
-//        return borrowDate;
-//    }
-//
-//    public void setBorrowDate(Date borrowDate) {
-//        this.borrowDate = borrowDate;
-//    }
+    public Date getBorrowDate() {
+        return borrowedDate;
+    }
+
+    public void setBorrowedDate(Date borrowedDate) {
+        this.borrowedDate = borrowedDate;
+    }
 
     public String getImage() {
         return image;

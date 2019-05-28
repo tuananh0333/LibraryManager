@@ -1,7 +1,6 @@
 package com.example.librarymanager.databases;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.example.librarymanager.models.BookModel;
 import com.example.librarymanager.models.CategoryModel;
@@ -23,7 +22,11 @@ public class DataStorage {
     public DataStorage(IDataListener dataListener) {
         this.dataListener = dataListener;
 
-        initCategoryData();
+        categoryDatabase = new CategoryDatabase();
+        bookDatabase = new BookDatabase();
+
+        getAllCategory();
+        getAllBook();
     }
 
     public static ArrayList<String> getCategoryListName()
@@ -36,8 +39,17 @@ public class DataStorage {
         return data;
     }
 
-    public void initCategoryData() {
-        categoryDatabase = new CategoryDatabase();
+    public static ArrayList<String> getCategoryListId()
+    {
+        ArrayList<String> data = new ArrayList<>();
+        for (CategoryModel category: categoryList) {
+            data.add(category.getId());
+        }
+
+        return data;
+    }
+
+    public void getAllCategory() {
         categoryDatabase.addListenerForSingleValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -55,8 +67,6 @@ public class DataStorage {
 
                 if (categoryList.size() > 0) {
                     dataListener.categoryLoaded();
-
-                    initBookData();
                 }
             }
 
@@ -67,9 +77,9 @@ public class DataStorage {
         });
     }
 
-    private void initBookData() {
-        bookDatabase = new BookDatabase(0);
-        bookDatabase.addListenerForSingleValueEventListener(new ValueEventListener() {
+    public void getAllBook() {
+        bookDatabase.getAllBook();
+        bookDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 bookList.clear();
@@ -94,8 +104,8 @@ public class DataStorage {
     }
 
     public void getBookDataWithCategoryId(int categoryId) {
-        bookDatabase = new BookDatabase(categoryId);
-        bookDatabase.addListenerForSingleValueEventListener(new ValueEventListener() {
+        bookDatabase.getBookWithCategoryId(categoryId);
+        bookDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 bookList.clear();
@@ -120,7 +130,6 @@ public class DataStorage {
     }
 
     public void getBookDataWithName(String param) {
-        bookDatabase = new BookDatabase();
         bookDatabase.getBooksWithName(param);
         bookDatabase.addListenerForSingleValueEventListener(new ValueEventListener() {
             @Override
@@ -136,6 +145,7 @@ public class DataStorage {
                         }
                     }
                 }
+                dataListener.bookLoaded();
 
 //                Log.d("abc", bookList.size() + " : " + bookList.get(0).toString());
 //                dataListener.bookLoaded();

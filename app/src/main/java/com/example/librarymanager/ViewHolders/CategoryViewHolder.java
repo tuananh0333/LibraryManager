@@ -1,4 +1,4 @@
-package com.example.librarymanager.ViewHolders;
+package com.example.librarymanager.viewHolders;
 
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -22,9 +22,13 @@ public class CategoryViewHolder extends AbstractCustomViewHolder {
     }
 
     @Override
-    public void setActive() {
-        if (this.categoryName != null) {
-            this.categoryName.setBackgroundResource(R.color.active);
+    public void setActive(Boolean active) {
+        if (active) {
+            if (this.categoryName != null) {
+                this.categoryName.setBackgroundResource(R.color.active);
+            }
+        } else {
+            this.categoryName.setBackgroundResource(R.color.white);
         }
     }
 }

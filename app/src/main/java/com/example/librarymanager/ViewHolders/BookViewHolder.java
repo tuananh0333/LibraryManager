@@ -1,10 +1,9 @@
-package com.example.librarymanager.ViewHolders;
+package com.example.librarymanager.viewHolders;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -54,7 +53,7 @@ public class BookViewHolder extends AbstractCustomViewHolder {
     }
 
     @Override
-    public void setActive() {
+    public void setActive(Boolean active) {
 
     }
 }

@@ -15,10 +15,12 @@ public class BookDatabase {
         reference = FirebaseDatabase.getInstance().getReference(NODE_NAME);
     }
 
-    public BookDatabase(int categoryId) {
-        String categoryName = DataStorage.categoryList.get(categoryId).getId();
+    public void getAllBook() {
+        query = reference.orderByChild("name").limitToFirst(10);
+    }
 
-        reference = FirebaseDatabase.getInstance().getReference(NODE_NAME);
+    public void getBookWithCategoryId(int categoryId) {
+        String categoryName = DataStorage.categoryList.get(categoryId).getId();
         query = reference.orderByChild("category").equalTo(categoryName);
     }
 
@@ -34,7 +36,6 @@ public class BookDatabase {
     public void addListenerForSingleValueEventListener(ValueEventListener valueEventListener) {
         query.addListenerForSingleValueEvent(valueEventListener);
     }
-
 
     public void writeNew(BookModel book) {
         book.setId(reference.push().getKey());

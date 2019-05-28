@@ -5,17 +5,15 @@
             android:id="@+id/nav_add"
             android:icon="@android:drawable/ic_input_add"
             android:title="@string/title_add_book" />
-        <item
-            android:id="@+id/nav_borrow"
-            android:icon="@android:drawable/ic_input_get"
-            android:title="@string/borrow" />
+
         <item
             android:id="@+id/nav_details"
             android:icon="@android:drawable/ic_menu_info_details"
             android:title="@string/detail" />
+
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_logout"
             android:icon="@android:drawable/ic_menu_manage"
-            android:title="@string/tools" />
+            android:title="@string/logout" />
     </group>
 </menu>

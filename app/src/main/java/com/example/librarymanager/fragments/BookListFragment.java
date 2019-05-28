@@ -10,22 +10,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 
 import com.example.librarymanager.R;
-import com.example.librarymanager.ViewHolders.CategoryViewHolder;
 import com.example.librarymanager.adapters.RecycleViewAdapter;
 import com.example.librarymanager.databases.DataStorage;
-import com.example.librarymanager.models.BookModel;
 
 public class BookListFragment extends AbstractCustomFragment {
     private RecyclerView categoryRecyclerView, bookRecyclerView;
     private ProgressBar progressBar;
-    private SearchView searchView;
 
     private RecycleViewAdapter bookAdapter, categoryAdapter;
 
     DataStorage dataStorage;
+
+    private int currentSelected = -1;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -33,7 +31,6 @@ public class BookListFragment extends AbstractCustomFragment {
         view = inflater.inflate(R.layout.list_book_layout, container, false);
 
         addControllers(view);
-        addEvents();
 
         dataStorage = new DataStorage(this);
 
@@ -47,8 +44,6 @@ public class BookListFragment extends AbstractCustomFragment {
         bookRecyclerView = view.findViewById(R.id.book_list);
         categoryRecyclerView = view.findViewById(R.id.category_list);
 
-        searchView = view.findViewById(R.id.search_param);
-
         progressBar = view.findViewById(R.id.process_bar);
         progressBar.setMax(100);
         progressBar.setVisibility(View.VISIBLE);
@@ -56,20 +51,6 @@ public class BookListFragment extends AbstractCustomFragment {
         // TODO Đổi style category đang chọn
     }
 
-    private void addEvents() {
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                dataStorage.getBookDataWithName(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-    }
 
     private void initCategory(Context context)
     {
@@ -101,10 +82,24 @@ public class BookListFragment extends AbstractCustomFragment {
     View.OnClickListener onCategoryClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            // TODO active category card
+            // Get current selected category
             int categoryId = categoryRecyclerView.getChildAdapterPosition(v);
-            dataStorage.getBookDataWithCategoryId(categoryId);
-            bookRecyclerView.setVisibility(View.INVISIBLE);
+            categoryAdapter.notifyDataSetChanged();
+
+            // Highlight selected category and request data
+            if (categoryId == currentSelected) {
+                currentSelected = -1;
+                categoryAdapter.select(-1);
+                dataStorage.getAllBook();
+            } else {
+                currentSelected = categoryId;
+                categoryAdapter.select(categoryId);
+                dataStorage.getBookDataWithCategoryId(categoryId);
+            }
+
+
+            // Turn on process bar
+            bookRecyclerView.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         }
     };
@@ -113,9 +108,24 @@ public class BookListFragment extends AbstractCustomFragment {
             @Override
             public void onClick(View v) {
                 int bookIndex = bookRecyclerView.getChildAdapterPosition(v);
+                bookAdapter.notifyDataSetChanged();
                 activity.commitFragment(AbstractCustomFragment.EDIT_BOOK, DataStorage.bookList.get(bookIndex));
         }
     };
+
+    @Override
+    public void finish() {
+        // Update data
+        currentSelected = -1;
+
+        dataStorage.getAllCategory();
+        dataStorage.getAllBook();
+
+        // Update UI
+        categoryRecyclerView.setVisibility(View.GONE);
+        bookRecyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
 
     @Override
     public void bookLoaded() {
@@ -124,6 +134,7 @@ public class BookListFragment extends AbstractCustomFragment {
             bookRecyclerView.setVisibility(View.VISIBLE);
         } else {
             // TODO alert no data
+            bookRecyclerView.setVisibility(View.VISIBLE);
         }
         progressBar.setVisibility(View.GONE);
     }
@@ -140,12 +151,14 @@ public class BookListFragment extends AbstractCustomFragment {
     }
 
     @Override
-    public String getFragmentTag() {
-        return LIST_BOOK;
-    }
-
-    @Override
     public void setData(Object data) {
-
+        if (data != null) {
+            bookAdapter.notifyDataSetChanged();
+            currentSelected = -1;
+            dataStorage.getBookDataWithName((String) data);
+            bookRecyclerView.setVisibility(View.GONE);
+            categoryRecyclerView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        }
     }
 }
