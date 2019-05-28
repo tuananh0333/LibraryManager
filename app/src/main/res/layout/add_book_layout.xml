@@ -65,11 +65,11 @@
             android:layout_height="wrap_content">
 
             <ImageButton
-                android:contentDescription="@string/choose_image_from_storage"
+                android:contentDescription="@string/take_image_using_camera"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/btnCapture"
-                android:src="@android:drawable/stat_notify_sdcard"
+                android:src="@android:drawable/ic_menu_camera"
                 android:background="@color/colorAccent"/>
 
             <Space
@@ -77,12 +77,12 @@
                 android:layout_height="match_parent" />
 
             <ImageButton
-                android:contentDescription="@string/take_image_using_camera"
+                android:contentDescription="@string/choose_image_from_storage"
                 android:id="@+id/btnChoose"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
-                android:src="@android:drawable/ic_menu_camera"
+                android:src="@android:drawable/stat_notify_sdcard"
                 android:background="@color/colorPrimary"/>
         </LinearLayout>
 
