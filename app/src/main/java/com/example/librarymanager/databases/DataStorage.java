@@ -50,7 +50,7 @@ public class DataStorage {
     }
 
     public void getAllCategory() {
-        categoryDatabase.addListenerForSingleValueEventListener(new ValueEventListener() {
+        categoryDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 categoryList.clear();

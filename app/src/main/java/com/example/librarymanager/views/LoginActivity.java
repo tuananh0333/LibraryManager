@@ -61,6 +61,12 @@ public class LoginActivity extends AppCompatActivity {
                 if (!username.isEmpty() && !password.isEmpty()) {
                     final String email = username + "@lib.tdc.edu.vn";
                     login(email, password);
+                } else {
+                    if (username.isEmpty()) {
+                        edtUsername.setText("");
+                        edtUsername.requestFocus();
+                        edtUsername.setError("Vui lòng nhập ID");
+                    }
                 }
             }
         });

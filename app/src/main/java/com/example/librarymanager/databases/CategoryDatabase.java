@@ -15,11 +15,7 @@ public class CategoryDatabase {
         reference = FirebaseDatabase.getInstance().getReference(NODE_NAME);
     }
 
-    public void setValueEventListener(ValueEventListener valueEventListener) {
+    public void addValueEventListener(ValueEventListener valueEventListener) {
         reference.addValueEventListener(valueEventListener);
-    }
-
-    public void addListenerForSingleValueEventListener(ValueEventListener valueEventListener) {
-        reference.addListenerForSingleValueEvent(valueEventListener);
     }
 }

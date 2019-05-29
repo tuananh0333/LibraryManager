@@ -21,6 +21,8 @@ import android.view.View;
 import android.widget.SearchView;
 
 import com.example.librarymanager.R;
+import com.example.librarymanager.databases.DataStorage;
+import com.example.librarymanager.databases.IDataListener;
 import com.example.librarymanager.databases.UserDatabase;
 import com.example.librarymanager.fragments.AbstractCustomFragment;
 import com.example.librarymanager.fragments.AddBookFragment;
@@ -31,7 +33,7 @@ import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements IDataListener {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity{
 
     SearchView searchView;
 
+    private boolean isLoadedCategory = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +93,9 @@ public class MainActivity extends AppCompatActivity{
 
                 switch (menuItem.getItemId()) {
                     case R.id.nav_add:
-                        commitFragment(AbstractCustomFragment.ADD_BOOK, null);
+                        if (isLoadedCategory) {
+                            commitFragment(AbstractCustomFragment.ADD_BOOK, null);
+                        }
                         break;
                     case R.id.nav_details:
                         break;
@@ -127,6 +132,7 @@ public class MainActivity extends AppCompatActivity{
                 return false;
             }
         });
+        searchView.setEnabled(false);
 
         return true;
     }
@@ -176,36 +182,37 @@ public class MainActivity extends AppCompatActivity{
     public void commitFragment(String tag, Object data) {
         if (!checkPermission(CAMERA)) {
             ActivityCompat.requestPermissions(this, new String[] {CAMERA, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
-        }
-
-        if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
-            switch (tag) {
-                case AbstractCustomFragment.ADD_BOOK:
-                    searchView.setVisibility(View.INVISIBLE);
-                    fragment = new AddBookFragment();
-                    break;
-                case AbstractCustomFragment.LIST_BOOK:
-                    if (searchView != null) {
-                        searchView.setVisibility(View.VISIBLE);
-                    }
-                    fragment = new BookListFragment();
-                    fragment.setData(data);
-                    break;
-                case AddBookFragment.EDIT_BOOK:
-                    searchView.setVisibility(View.INVISIBLE);
-                    fragment = new EditBookFragment();
-                    fragment.setData(data);
-                    break;
-            }
         } else {
-            fragment = (AbstractCustomFragment)getSupportFragmentManager().findFragmentByTag(tag);
+
+            if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
+                switch (tag) {
+                    case AbstractCustomFragment.ADD_BOOK:
+                        searchView.setVisibility(View.INVISIBLE);
+                        fragment = new AddBookFragment();
+                        break;
+                    case AbstractCustomFragment.LIST_BOOK:
+                        if (searchView != null) {
+                            searchView.setVisibility(View.VISIBLE);
+                        }
+                        fragment = new BookListFragment();
+                        fragment.setData(data);
+                        break;
+                    case AddBookFragment.EDIT_BOOK:
+                        searchView.setVisibility(View.INVISIBLE);
+                        fragment = new EditBookFragment();
+                        fragment.setData(data);
+                        break;
+                }
+            } else {
+                fragment = (AbstractCustomFragment) getSupportFragmentManager().findFragmentByTag(tag);
+            }
+
+            fragment.setActivity(this);
+
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.main_fragment, fragment, tag);
+            fragmentTransaction.commit();
         }
-
-        fragment.setActivity(this);
-
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.main_fragment, fragment, tag);
-        fragmentTransaction.commit();
     }
 
     private boolean checkPermission(String permission) {
@@ -217,5 +224,17 @@ public class MainActivity extends AppCompatActivity{
         UserDatabase.signOut();
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void bookLoaded() {
+        searchView.setEnabled(isLoadedCategory);
+    }
+
+    @Override
+    public void categoryLoaded() {
+        if (DataStorage.categoryList.size() > 0) {
+            isLoadedCategory = true;
+        }
     }
 }

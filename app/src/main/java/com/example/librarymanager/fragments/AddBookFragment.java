@@ -129,12 +129,14 @@ public class AddBookFragment extends AbstractCustomFragment{
 
         if (isEmpty(bookName)) {
             edtBookName.setError("Vui lòng nhập tên sách");
+            edtBookName.setText("");
             edtBookName.requestFocus();
             return false;
         }
 
         if (isEmpty(bookAuthor)) {
             edtBookAuthor.setError("Vui lòng nhập tên tác giả");
+            edtBookAuthor.setText("");
             edtBookAuthor.requestFocus();
             return false;
         }
