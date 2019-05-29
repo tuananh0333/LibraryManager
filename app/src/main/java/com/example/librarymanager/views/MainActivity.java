@@ -93,9 +93,7 @@ public class MainActivity extends AppCompatActivity implements IDataListener {
 
                 switch (menuItem.getItemId()) {
                     case R.id.nav_add:
-                        if (isLoadedCategory) {
-                            commitFragment(AbstractCustomFragment.ADD_BOOK, null);
-                        }
+                        commitFragment(AbstractCustomFragment.ADD_BOOK, null);
                         break;
                     case R.id.nav_details:
                         break;
@@ -233,8 +231,6 @@ public class MainActivity extends AppCompatActivity implements IDataListener {
 
     @Override
     public void categoryLoaded() {
-        if (DataStorage.categoryList.size() > 0) {
-            isLoadedCategory = true;
-        }
+        isLoadedCategory = true;
     }
 }
